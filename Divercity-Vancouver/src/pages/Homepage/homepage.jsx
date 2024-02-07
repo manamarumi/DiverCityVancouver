@@ -7,6 +7,7 @@ import { CalendarIcon, EventIcon, HomeIcon, SearchIcon } from "../../components/
 import { Link } from 'react-router-dom';
 
 
+
 export default function Homepage() {
   return (
     <div>
