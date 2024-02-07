@@ -1,29 +1,32 @@
 import React from 'react';
-import {BrowserRouter  as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage/homepage';
+import Calendar from './pages/Homepage/Calendar/calendar';
 import Adminpage from './pages/Admin/adminpage';
-import Postevents from './pages/Admin/adminpage';
-import Editevents from './pages/Admin/adminpage';
-import Postnews from './pages/Admin/adminpage';
-import Editnews from './pages/Admin/adminpage';
+import Postevents from './pages/Admin/postevents'; 
+import Editevents from './pages/Admin/editevents'; 
+import Postnews from './pages/Admin/postnews'; 
+import Editnews from './pages/Admin/editnews'; 
+import Signuppage from './pages/Customer/Signuppage/signuppage'; 
+import Loginpage from './pages/Customer/Login/Login';
 
 
 function App() {
   return (
     <div>
       <Router>
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            {/* <Route path="/login" element={<Homepage />} />
-            <Route path="/signup" element={<Homepage />} />
-            <Route path="/calendar" element={<Homepage />} />
-            <Route path="/events" element={<Homepage />} /> */}
-            <Route path="/admin" element={<Adminpage />} />   
-            <Route path="/admin/postevent" element={<Postevents />} />
-            <Route path="/admin/editevent" element={<Editevents />} />
-            <Route path="/admin/postnews" element={<Postnews />} />   
-            <Route path="/admin/editnews" element={<Editnews />} />       
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Loginpage />} />
+          <Route path="/signup" element={<Signuppage />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/events" element={<Homepage />} />
+          <Route path="/admin" element={<Adminpage />} />
+          <Route path="/admin/postevent" element={<Postevents />} />
+          <Route path="/admin/editevent" element={<Editevents />} />
+          <Route path="/admin/postnews" element={<Postnews />} />
+          <Route path="/admin/editnews" element={<Editnews />} />
+        </Routes>  
       </Router>
     </div>
   );
