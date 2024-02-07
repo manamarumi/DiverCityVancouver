@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter  as Router, Routes, Route} from 'react-router-dom';
 import Homepage from './pages/Homepage/homepage';
+import Calander from './pages/Calendar/calendar';
 import Adminpage from './pages/Admin/adminpage';
 import Postevents from './pages/Admin/adminpage';
 import Editevents from './pages/Admin/adminpage';
@@ -14,10 +15,10 @@ function App() {
       <Router>
           <Routes>
             <Route path="/" element={<Homepage />} />
-            {/* <Route path="/login" element={<Homepage />} />
+            <Route path="/login" element={<Homepage />} />
             <Route path="/signup" element={<Homepage />} />
-            <Route path="/calendar" element={<Homepage />} />
-            <Route path="/events" element={<Homepage />} /> */}
+            <Route path="/calendar" element={<Calander />} />
+            <Route path="/events" element={<Homepage />} />
             <Route path="/admin" element={<Adminpage />} />   
             <Route path="/admin/postevent" element={<Postevents />} />
             <Route path="/admin/editevent" element={<Editevents />} />
