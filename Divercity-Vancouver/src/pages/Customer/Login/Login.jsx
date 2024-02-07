@@ -1,7 +1,11 @@
 import React, {useState} from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
 import placeholder from '../../../assets/signuppics/signupImage.jpg';
+
+import placeholder from "../../../assets/placeholder.jpg";
+
 import { Link } from 'react-router-dom';
 
 export default function Login() {
@@ -83,7 +87,11 @@ export default function Login() {
                     </Link>
                   </div>
                   <div className="text-sm">
+
                     <Link className="font-medium text-indigo-600 hover:text-indigo-500" to={'/admin'}>
+
+                    <Link className="font-medium text-indigo-600 hover:text-indigo-500" href="#">
+
                       Login as Admin
                     </Link>
                   </div>
