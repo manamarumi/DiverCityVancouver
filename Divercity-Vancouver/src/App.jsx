@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage/homepage';
 import Calendar from './pages/Calendar/calendar';
 import Adminpage from './pages/Admin/adminpage';
@@ -19,11 +19,11 @@ function App() {
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/events" element={<Homepage />} />
-          <Route path="/admin" element={<Adminpage />} />   
+          <Route path="/admin" element={<Adminpage />} />
           <Route path="/admin/postevent" element={<Postevents />} />
           <Route path="/admin/editevent" element={<Editevents />} />
-          <Route path="/admin/postnews" element={<Postnews />} />   
-          <Route path="/admin/editnews" element={<Editnews />} />       
+          <Route path="/admin/postnews" element={<Postnews />} />
+          <Route path="/admin/editnews" element={<Editnews />} />
         </Routes>
       </Router>
     </div>

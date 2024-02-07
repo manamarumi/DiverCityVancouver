@@ -1,53 +1,53 @@
-import React from "react";
-import { TEInput, TERipple } from "tw-elements-react";
+import React from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import signupImage from '../../assets/signuppics/signupImage.jpg';
 
-const signuppage = () => {
+const Signuppage = () => {
   return (
-    <section className="mt-10 flex justify-center items-center h-screen">
-      {/* Left column container with register information */}
-      <div className="w-1/2 px-6">
-        <h1 className="text-3xl mb-4">Welcome to Join us today!</h1>
-        <div className="mb-4">
-          <label className="block mb-2">Name:</label>
-          <TEInput type="text" size="lg" className="w-full" />
+    <div className="flex h-screen items-center justify-center">
+      <div className="flex h-[500px] w-[900px] justify-between bg-white">
+        <div className="flex w-1/2 flex-col items-center justify-center space-y-4 px-12">
+          <h1 className="text-2xl font-bold" style={{ color: '#4654A3' }}>Welcome to Join us today!</h1>
+          <form className="w-full space-y-4">
+            <div>
+              <label className="block text-sm font-medium" htmlFor="name">
+                Name:
+              </label>
+              <Input className="w-full" id="name" placeholder="Your name" type="text" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium" htmlFor="email">
+                Email:
+              </label>
+              <Input className="w-full" id="email" placeholder="Your email" type="email" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium" htmlFor="password">
+                Password:
+              </label>
+              <Input className="w-full" id="password" placeholder="Your password" type="password" />
+            </div>
+            <Button className="w-full" style={{ backgroundColor: '#4654A3' }}>Sign up</Button>
+          </form>
+          <p className="text-sm">
+            Already have an account?
+            <Link to="/login" className="text-blue-600">Login now</Link>
+          </p>
+          <Button className="w-full" variant="outline" style={{ borderColor: '#4654A3', color: '#4654A3' }}>
+            Sign in with Google
+          </Button>
         </div>
-        <div className="mb-4">
-          <label className="block mb-2">Email:</label>
-          <TEInput type="email" size="lg" className="w-full" />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Password:</label>
-          <TEInput type="password" size="lg" className="w-full" />
-        </div>
-        <TERipple rippleColor="light" className="w-full mb-4">
-          <button
-            type="button"
-            className="bg-primary text-white px-7 py-3 rounded-full uppercase font-medium shadow-md hover:bg-primary-600 focus:outline-none focus:ring focus:ring-primary-400"
-          >
-            Sign up
-          </button>
-        </TERipple>
-        <p>
-          Already have an account?{" "}
-          <a href="#!" className="text-primary">
-            Login now
-          </a>
-        </p>
-        <button className="mt-4 bg-white text-black px-7 py-3 rounded-full uppercase font-medium shadow-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-400">
-          Sign in with Google
-        </button>
-      </div>
-
-      {/* Right column container with signup image */}
-      <div className="w-1/2">
-        <img
-          src="src/assets/signuppics/signupImage.jpg"
-          alt="Signup Image"
-          className="max-w-full h-auto"
+        <div
+          className="w-1/2 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${signupImage})`,
+          }}
         />
       </div>
-    </section>
+    </div>
   );
 };
 
-export default signuppage;
+export default Signuppage;
