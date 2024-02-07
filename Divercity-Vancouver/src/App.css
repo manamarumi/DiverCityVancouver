@@ -1,3 +1,4 @@
+
 /* app.css */
 @tailwind base;
 @tailwind components;
@@ -79,3 +80,4 @@
     @apply bg-background text-foreground;
   }
 }
+
