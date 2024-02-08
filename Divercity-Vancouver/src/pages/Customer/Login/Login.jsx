@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 
 import placeholder from '../../../assets/signuppics/signupImage.jpg';
 
-import placeholder from "../../../assets/placeholder.jpg";
-
 import { Link } from 'react-router-dom';
 
 export default function Login() {
