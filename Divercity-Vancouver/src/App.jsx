@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage/homepage';
 
 import Calendar from './pages/Homepage/Calendar/calendar';
+import Admin from './pages/Admin/admin';
 import Adminpage from './pages/Admin/adminpage';
 import Postevents from './pages/Admin/postevents'; 
 import Editevents from './pages/Admin/editevents'; 
@@ -41,7 +42,8 @@ function App() {
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/events" element={<Homepage />} />
-          <Route path="/admin" element={<Adminpage />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/userinfo" element={<Adminpage />} />
           <Route path="/admin/postevent" element={<Postevents />} />
           <Route path="/admin/editevent" element={<Editevents />} />
           <Route path="/admin/postnews" element={<Postnews />} />
