@@ -3,8 +3,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import signupImage from '../../../assets/signuppics/signupImage.jpg';
-import googleIcon from '../../../assets/signuppics/googleIcon.png'; // Import the Google icon image
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import googleIcon from '../../../assets/signuppics/googleIcon.png';
+import { createUserWithEmailAndPassword, signInWithPopup , GoogleAuthProvider } from "firebase/auth";
 import { auth } from '../../../firebase';
 
 const Signuppage = () => {
@@ -38,6 +38,35 @@ const Signuppage = () => {
       });
   }
 
+  const handleSignupwithGoogle = (event) => {
+
+    event.preventDefault();
+
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        navigate('/');
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+
+  }
+
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -56,7 +85,7 @@ const Signuppage = () => {
                 <label className="block text-sm font-medium text-gray-700" htmlFor="email">
                   Email:
                 </label>
-                <Input value={email} onChange={(event) => setEmail(event.target.value)}  className="w-full" id="email" placeholder="Your email" type="email" />
+                <Input value={email} onChange={(event) => setEmail(event.target.value)} className="w-full" id="email" placeholder="Your email" type="email" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700" htmlFor="password">
@@ -64,12 +93,12 @@ const Signuppage = () => {
                 </label>
                 <Input value={password} onChange={(event) => setPassword(event.target.value)} className="w-full" id="password" placeholder="Your password" type="password" />
               </div>
-              <Button  onClick={handleSignup}  className="w-full" style={{ backgroundColor: '#4654A3' }}>Sign up</Button>
+              <Button onClick={handleSignup} className="w-full" style={{ backgroundColor: '#4654A3' }}>Sign up</Button>
             </form>
             <p className="text-sm text-gray-600">
               Already have an account? <Link to="/login" className="text-blue-600">Login now</Link>
             </p>
-            <Button className="w-full border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl" style={{ backgroundColor: 'white', color: '#4654A3' }}>
+            <Button onClick={handleSignupwithGoogle} className="w-full border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl" style={{ backgroundColor: 'white', color: '#4654A3' }}>
               <img src={googleIcon} alt="Google Icon" className="w-6 h-6 mr-2" /> {/* Add the Google icon */}
               Sign in with Google
             </Button>
