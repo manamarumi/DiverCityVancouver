@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import placeholder from '../../../assets/signuppics/signupImage.jpg';
 import { Link } from 'react-router-dom';
 
 export default function Login() {
-    
+
   // State for email and password inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +26,7 @@ export default function Login() {
   };
 
   return (
-    
+
     <div className="flex min-h-screen bg-gray-100">
       {/* Render the image on the left side */}
       <div className="relative w-0 flex-1 hidden lg:block">
@@ -83,7 +83,7 @@ export default function Login() {
                     </Link>
                   </div>
                   <div className="text-sm">
-                    <Link className="font-medium text-indigo-600 hover:text-indigo-500" to={'/admin'}>
+                    <Link className="font-medium text-red-500 hover:text-red-300" to={'/admin'}>
                       Login as Admin
                     </Link>
                   </div>
