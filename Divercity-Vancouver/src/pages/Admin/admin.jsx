@@ -1,9 +1,8 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import signupImage from '../../assets/signuppics//SignupImage.jpg'
+import placeholderImage from '../../assets/placeholder.jpg'; // Updated image path
 import { Link } from 'react-router-dom';
-
 
 const Admin = () => {
     return (
@@ -63,7 +62,7 @@ const Admin = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-3/5 bg-cover bg-center" style={{ backgroundImage: `url(${signupImage})` }} />
+                <div className="w-3/5 bg-cover bg-center" style={{ backgroundImage: `url(${placeholderImage})` }} />
             </div>
         </div>
     );
