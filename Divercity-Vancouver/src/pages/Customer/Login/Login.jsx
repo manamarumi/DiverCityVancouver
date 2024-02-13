@@ -15,15 +15,11 @@ export default function Loginpage() {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+	@@ -19,8 +23,46 @@ export default function Loginpage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -66,59 +62,7 @@ export default function Loginpage() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex h-[550px] w-[1100px] bg-white rounded-xl overflow-hidden shadow-md">
-        <div className="flex w-3/5">
-          <img src={placeholder} alt="Background" className="w-full h-auto object-cover" />
-        </div>
-        <div className="flex flex-col justify-center w-2/5 p-8">
-          <h1 className="text-2xl font-bold text-center mb-4" style={{ color: '#4654A3' }}>Welcome back</h1>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Your email"
-                autoComplete="email"
-                value={email}
-                onChange={handleEmailChange}
-                className="mt-1 w-full"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Your password"
-                autoComplete="current-password"
-                value={password}
-                onChange={handlePasswordChange}
-                className="mt-1 w-full"
-                required
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="text-sm">
-                <Link to="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                  Forgot your password?
-                </Link>
-              </div>
-              <div className="text-sm">
-                <Link to="/admin" className="font-medium text-red-500 hover:text-red-300">
-                  Login as Admin
-                </Link>
-              </div>
-            </div>
-            <Button type="submit" className="w-full bg-indigo-500 text-white hover:bg-indigo-600" style={{ backgroundColor: '#4654A3' }}>
+	@@ -80,6 +122,18 @@ export default function Loginpage() {
               Login
             </Button>
           </form>
@@ -137,5 +81,3 @@ export default function Loginpage() {
         </div>
       </div>
     </div>
-  );
-}

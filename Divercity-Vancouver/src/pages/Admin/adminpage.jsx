@@ -13,7 +13,7 @@ export default function Adminpage() {
           <h1 className="text-2xl text-white font-bold mb-10">Welcome, Admin</h1>
           <ul className="space-y-2">
             <li>
-              <Link to={'/admin'}>
+              <Link to={'/admin/userinfo'}>
                 <Button className="w-full justify-start text-left">User Information</Button>
               </Link>
             </li>
