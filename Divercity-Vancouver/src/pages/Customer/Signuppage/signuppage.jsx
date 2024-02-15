@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
-import signupImage from '../../../assets/signuppics/signupImage.jpg';
+import signupImage from '../../../assets/signuppics/SignupImage.jpg';
 
 import googleIcon from '../../../assets/signuppics/googleIcon.png'; // Import the Google icon image
 
