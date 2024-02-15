@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, signInWithPopup , GoogleAuthProvider } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from '../../../firebase';
 
-import placeholder from '../../../assets/signuppics/signupImage.jpg';
+import placeholder from '../../../assets/placeholder.jpg';
 import googleIcon from '../../../assets/signuppics/googleIcon.png';
 
 export default function Loginpage() {
@@ -15,7 +15,11 @@ export default function Loginpage() {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-	@@ -19,8 +23,46 @@ export default function Loginpage() {
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +34,6 @@ export default function Loginpage() {
         }
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorMessage);
         // Handle errors here
@@ -51,8 +54,8 @@ export default function Loginpage() {
         navigate('/');
       }).catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
         const errorMessage = error.message;
+        console.error(errorMessage);
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
@@ -62,22 +65,50 @@ export default function Loginpage() {
   };
 
   return (
-	@@ -80,6 +122,18 @@ export default function Loginpage() {
-              Login
-            </Button>
-          </form>
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-600">Or sign in with:</p>
-            <Button onClick={handleLoginWithGoogle} className="w-full border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl" style={{ backgroundColor: 'white', color: '#4654A3' }}>
-              <img src={googleIcon} alt="Google Icon" className="w-6 h-6 mr-2" />
-              Login with Google
-            </Button>
-          </div>
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-600">
-              Don't have an account? <Link to="/signup" className="text-blue-600">Sign up now</Link>
-            </p>
+    <div className="flex justify-center items-center h-screen">
+      <div className="flex h-[550px] w-[1100px] justify-between bg-white rounded-xl overflow-hidden" style={{ boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px' }}>
+        <div className="w-3/5 bg-cover bg-center" style={{ backgroundImage: `url(${placeholder})` }} />
+        <div className="flex w-2/5">
+          <div className="border-r border-gray-200 w-full flex flex-col items-center justify-center space-y-4 px-12 py-8">
+            <h2 className="text-2xl font-bold text-center mb-4">Login to your account</h2>
+            <form onSubmit={handleSubmit} className="w-full space-y-4">
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={handleEmailChange}
+                required
+                className="w-full"
+              />
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+                className="w-full"
+              />
+              <Button type="submit" className="w-full" style={{ backgroundColor: '#4654A3' }}>
+                Login
+              </Button>
+            </form>
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600">Or sign in with:</p>
+            </div>
+            <div>
+              <Button onClick={handleLoginWithGoogle} className="w-full border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl" style={{ backgroundColor: 'white', color: '#4654A3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={googleIcon} alt="Google Icon" className="w-6 h-6 mr-2" />
+                Login with Google
+              </Button>
+            </div>
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600">
+                Don't have an account? <Link to="/signup" className="text-blue-600">Sign up now</Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  );
+}
