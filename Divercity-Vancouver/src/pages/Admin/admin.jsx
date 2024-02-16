@@ -11,7 +11,7 @@ const Admin = () => {
                 <div className="flex flex-col justify-center flex-1 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="w-full max-w-lg mx-auto lg:w-96">
                         <div>
-                            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Welcome back Admin</h2>
+                            <h2 className="mt-6 text-3xl font-extrabold text-gray-900" style={{ color: '#4654A3' }}>Welcome back Admin</h2>
                         </div>
                         <div className="mt-8">
                             <div className="mt-6">
@@ -19,7 +19,7 @@ const Admin = () => {
                                     {/* Input fields */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700" htmlFor="email">
-                                            Email address
+                                            Email:
                                         </label>
                                         <div className="mt-1">
                                             <Input autoComplete="email" id="email" name="email" placeholder="email" required type="email" />
@@ -27,7 +27,7 @@ const Admin = () => {
                                     </div>
                                     <div className="space-y-1">
                                         <label className="block text-sm font-medium text-gray-700" htmlFor="password">
-                                            Password
+                                            Password:
                                         </label>
                                         <div className="mt-1">
                                             <Input

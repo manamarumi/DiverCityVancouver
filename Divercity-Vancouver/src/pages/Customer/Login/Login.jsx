@@ -70,7 +70,7 @@ export default function Loginpage() {
         <div className="w-3/5 bg-cover bg-center" style={{ backgroundImage: `url(${placeholder})` }} />
         <div className="flex w-2/5">
           <div className="border-r border-gray-200 w-full flex flex-col items-center justify-center space-y-4 px-12 py-8">
-            <h2 className="text-2xl font-bold text-center mb-4">Login to your account</h2>
+            <h1 className="text-2xl font-bold text-center mb-4" style={{ color: '#4654A3' }}>Welcome back</h1>
             <form onSubmit={handleSubmit} className="w-full space-y-4">
               <Input
                 type="email"
@@ -93,13 +93,16 @@ export default function Loginpage() {
               </Button>
             </form>
             <div className="text-center mt-4">
-              <p className="text-sm text-gray-600">Or sign in with:</p>
+              <p className="text-sm text-gray-600">other way to login:</p>
             </div>
-            <div>
-              <Button onClick={handleLoginWithGoogle} className="w-full border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl" style={{ backgroundColor: 'white', color: '#4654A3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="flex items-center justify-between w-full">
+              <Button onClick={handleLoginWithGoogle} className="border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl flex items-center" style={{ backgroundColor: 'white', color: '#4654A3' }}>
                 <img src={googleIcon} alt="Google Icon" className="w-6 h-6 mr-2" />
                 Login with Google
               </Button>
+              <Link to="/admin" className="text-red-600 font-semibold flex items-center">
+                <span style={{ borderBottom: '2px solid transparent' }}>Log in as Admin</span>
+              </Link>
             </div>
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600">
