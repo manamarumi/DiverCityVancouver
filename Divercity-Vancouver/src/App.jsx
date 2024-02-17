@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage/homepage';
+import UserLoginhomepage from './pages/Homepage/userLoginhomepage';
 import Admin from './pages/Admin/admin';
 import Adminpage from './pages/Admin/adminpage';
 import Postevents from './pages/Admin/postevents';
@@ -18,6 +19,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Homepage />} />
+          <Route path="/home/userLogin" element={<UserLoginhomepage />} />
           <Route path="/login" element={<Loginpage />} />
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/calendar" element={<Calendar />} />
