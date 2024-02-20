@@ -2,10 +2,17 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from '../../../firebase';
 
 import placeholder from '../../../assets/placeholder.jpg';
+=======
+import { signInWithEmailAndPassword, signInWithPopup , GoogleAuthProvider } from "firebase/auth";
+import { auth } from '../../../firebase';
+
+import placeholder from '../../../assets/signuppics/signupImage.jpg';
+>>>>>>> d01668265090cf4d3ca207e55c01b0e9dc74421f
 import googleIcon from '../../../assets/signuppics/googleIcon.png';
 
 export default function Loginpage() {
@@ -15,12 +22,15 @@ export default function Loginpage() {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-  };
+	@@ -19,8 +23,46 @@ export default function Loginpage() {
 
+<<<<<<< HEAD
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
+=======
+>>>>>>> d01668265090cf4d3ca207e55c01b0e9dc74421f
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -30,10 +40,18 @@ export default function Loginpage() {
         const user = userCredential.user;
         if (user) {
           // Redirect to home page or wherever you want
+<<<<<<< HEAD
           navigate('/home/userLogin');
         }
       })
       .catch((error) => {
+=======
+          navigate('/');
+        }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+>>>>>>> d01668265090cf4d3ca207e55c01b0e9dc74421f
         const errorMessage = error.message;
         console.error(errorMessage);
         // Handle errors here
@@ -51,11 +69,19 @@ export default function Loginpage() {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
+<<<<<<< HEAD
         navigate('/home/userLogin');
       }).catch((error) => {
         // Handle Errors here.
         const errorMessage = error.message;
         console.error(errorMessage);
+=======
+        navigate('/');
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+>>>>>>> d01668265090cf4d3ca207e55c01b0e9dc74421f
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
@@ -65,6 +91,7 @@ export default function Loginpage() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="flex justify-center items-center h-screen">
       <div className="flex h-[550px] w-[1100px] justify-between bg-white rounded-xl overflow-hidden" style={{ boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px' }}>
         <div className="w-3/5 bg-cover bg-center" style={{ backgroundImage: `url(${placeholder})` }} />
@@ -115,3 +142,24 @@ export default function Loginpage() {
     </div>
   );
 }
+=======
+	@@ -80,6 +122,18 @@ export default function Loginpage() {
+              Login
+            </Button>
+          </form>
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">Or sign in with:</p>
+            <Button onClick={handleLoginWithGoogle} className="w-full border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl" style={{ backgroundColor: 'white', color: '#4654A3' }}>
+              <img src={googleIcon} alt="Google Icon" className="w-6 h-6 mr-2" />
+              Login with Google
+            </Button>
+          </div>
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Don't have an account? <Link to="/signup" className="text-blue-600">Sign up now</Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+>>>>>>> d01668265090cf4d3ca207e55c01b0e9dc74421f

@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import signupImage from '../../../assets/signuppics/SignupImage.jpg';
+=======
+import signupImage from '../../../assets/signuppics/signupImage.jpg';
+
+>>>>>>> d01668265090cf4d3ca207e55c01b0e9dc74421f
 import googleIcon from '../../../assets/signuppics/googleIcon.png'; // Import the Google icon image
+
 import { createUserWithEmailAndPassword, signInWithPopup , GoogleAuthProvider } from "firebase/auth";
 import { auth, db  } from '../../../firebase';
 import { addDoc , collection, Timestamp } from 'firebase/firestore';
