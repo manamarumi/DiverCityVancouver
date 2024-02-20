@@ -30,7 +30,7 @@ export default function Loginpage() {
         const user = userCredential.user;
         if (user) {
           // Redirect to home page or wherever you want
-          navigate('/');
+          navigate('/home/userLogin');
         }
       })
       .catch((error) => {
@@ -51,7 +51,7 @@ export default function Loginpage() {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-        navigate('/');
+        navigate('/home/userLogin');
       }).catch((error) => {
         // Handle Errors here.
         const errorMessage = error.message;
