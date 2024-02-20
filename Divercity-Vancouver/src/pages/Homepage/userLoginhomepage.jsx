@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Link } from 'react-router-dom';
-import { CalendarIcon, EventIcon, HomeIcon, SearchIcon, ProfileIcon } from "../../components/HomepageIcon.jsx";
+import { CalendarIcon, EventIcon, HomeIcon, SearchIcon, ProfileIcon } from "../../components/homepageIcon.jsx";
 import backgroundImage from "../../assets/homepage_background.jpg";
 import homepageIcon from "../../assets/homepage_icon.png";
 
