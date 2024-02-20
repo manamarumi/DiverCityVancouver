@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link, useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from '../../../firebase';
 
-import placeholder from '../../../assets/signuppics/signupImage.jpg';
+import placeholder from '../../../assets/placeholder.jpg';
+import googleIcon from '../../../assets/signuppics/googleIcon.png';
 
-import { Link } from 'react-router-dom';
-
-export default function Login() {
-
-  // State for email and password inputs
+export default function Loginpage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -20,91 +21,93 @@ export default function Login() {
     setPassword(e.target.value);
   };
 
-  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add logic for handling form submission
-    console.log("Login form submitted:", { email, password });
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        if (user) {
+          // Redirect to home page or wherever you want
+          navigate('/home/userLogin');
+        }
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.error(errorMessage);
+        // Handle errors here
+      });
+  };
+
+  const handleLoginWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        navigate('/home/userLogin');
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorMessage = error.message;
+        console.error(errorMessage);
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   };
 
   return (
-
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Render the image on the left side */}
-      <div className="relative w-0 flex-1 hidden lg:block">
-        <img
-          alt="Background"
-          className="absolute inset-0 h-full w-full object-cover"
-          src={placeholder}
-          style={{
-            aspectRatio: "1070/660",
-            objectFit: "cover",
-          }}
-        />
-      </div>
-
-      {/* Render the login form content on the right side */}
-      <div className="flex flex-col justify-center flex-1 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="w-full max-w-lg mx-auto lg:w-96">
-          <div>
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Welcome back</h2>
-          </div>
-          <div className="mt-8">
-            <div className="mt-6">
-              <form action="#" className="space-y-6" method="POST">
-                {/* Input fields */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700" htmlFor="email">
-                    Email address
-                  </label>
-                  <div className="mt-1">
-                    <Input autoComplete="email" id="email" name="email" placeholder="email" required type="email" />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700" htmlFor="password">
-                    Password
-                  </label>
-                  <div className="mt-1">
-                    <Input
-                      autoComplete="current-password"
-                      id="password"
-                      name="password"
-                      placeholder="password"
-                      required
-                      type="password"
-                    />
-                  </div>
-                </div>
-
-                {/* Forgot password and admin login links */}
-                <div className="flex items-center justify-between">
-                  <div className="text-sm">
-                    <Link className="font-medium text-indigo-600 hover:text-indigo-500" href="#">
-                      Forgot your password?
-                    </Link>
-                  </div>
-                  <div className="text-sm">
-                    <Link className="font-medium text-red-500 hover:text-red-300" to={'/admin'}>
-                      Login as Admin
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Login button */}
-                <div>
-                  <Button className="w-full">Login</Button>
-                </div>
-              </form>
-              {/* Continue with text */}
-              <div className="mt-6 relative">
-                <div aria-hidden="true" className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-              </div>
-              {/* Social login icons */}
-              <div className="mt-6 grid grid-cols-2 gap-3">
-              </div>
+    <div className="flex justify-center items-center h-screen">
+      <div className="flex h-[550px] w-[1100px] justify-between bg-white rounded-xl overflow-hidden" style={{ boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px' }}>
+        <div className="w-3/5 bg-cover bg-center" style={{ backgroundImage: `url(${placeholder})` }} />
+        <div className="flex w-2/5">
+          <div className="border-r border-gray-200 w-full flex flex-col items-center justify-center space-y-4 px-12 py-8">
+            <h1 className="text-2xl font-bold text-center mb-4" style={{ color: '#4654A3' }}>Welcome back</h1>
+            <form onSubmit={handleSubmit} className="w-full space-y-4">
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={handleEmailChange}
+                required
+                className="w-full"
+              />
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+                className="w-full"
+              />
+              <Button type="submit" className="w-full" style={{ backgroundColor: '#4654A3' }}>
+                Login
+              </Button>
+            </form>
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600">other way to login:</p>
+            </div>
+            <div className="flex items-center justify-between w-full">
+              <Button onClick={handleLoginWithGoogle} className="border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl flex items-center" style={{ backgroundColor: 'white', color: '#4654A3' }}>
+                <img src={googleIcon} alt="Google Icon" className="w-6 h-6 mr-2" />
+                Login with Google
+              </Button>
+              <Link to="/admin" className="text-red-600 font-semibold flex items-center">
+                <span style={{ borderBottom: '2px solid transparent' }}>Log in as Admin</span>
+              </Link>
+            </div>
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600">
+                Don't have an account? <Link to="/signup" className="text-blue-600">Sign up now</Link>
+              </p>
             </div>
           </div>
         </div>
