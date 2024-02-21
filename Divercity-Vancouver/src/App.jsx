@@ -25,7 +25,7 @@ function App() {
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/calendar/monthlycalendar" element={<MonthlyCalendar />} />
-          <Route path="/events" element={<Homepage />} />
+          <Route path="/events" element={<MonthlyCalendar />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/userinfo" element={<Adminpage />} />
           <Route path="/admin/userdetails/:username" element={<UserDetails />} />
