@@ -7,7 +7,7 @@ import { auth } from '../../../firebase';
 
 import placeholder from '../../../assets/placeholder.jpg';
 import googleIcon from '../../../assets/signuppics/googleIcon.png';
-
+//Test
 export default function Loginpage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
