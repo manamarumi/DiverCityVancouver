@@ -1,26 +1,29 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth'
+import { getFirestore } from "firebase/firestore";
+
+
+
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBMTgDoVYXyNEyHXsqSo9XhyI3fH1CV3p0",
-  authDomain: "divercity-vacouver.firebaseapp.com",
-  databaseURL: "https://divercity-vacouver-default-rtdb.firebaseio.com/",
-  projectId: "divercity-vacouver",
-  storageBucket: "divercity-vacouver.appspot.com",
-  messagingSenderId: "583776857911",
-  appId: "1:583776857911:web:365d81935ec8d924e274b2"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  projectId: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  storageBucket: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_APP_ID,
+  appId: import.meta.env.FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-
 const auth = getAuth();
+const db = getFirestore(app);
 
 
-
-export { app, auth };
+export { app, auth, db };

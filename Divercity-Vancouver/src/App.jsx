@@ -12,6 +12,7 @@ import Signuppage from './pages/Customer/Signuppage/signuppage';
 import Loginpage from './pages/Customer/Login/Login';
 import MonthlyCalendar from './pages/MonthlyCalendar/monthlyCalendar';
 import Calendar from './pages/Calendar/calendar';
+import UserDetails from './pages/Admin/userdetails';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/events" element={<Homepage />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/userinfo" element={<Adminpage />} />
+          <Route path="/admin/userdetails/:username" element={<UserDetails />} />
           <Route path="/admin/postevent" element={<Postevents />} />
           <Route path="/admin/editevent" element={<Editevents />} />
           <Route path="/admin/postnews" element={<Postnews />} />
