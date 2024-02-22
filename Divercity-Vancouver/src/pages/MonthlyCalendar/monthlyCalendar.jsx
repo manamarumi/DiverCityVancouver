@@ -19,17 +19,17 @@ export default function MonthlyCalendar() {
         <Card className="w-full">
           <div className="flex">
             <CardHeader>
-              <img
-                alt="Canada day celebration"
-                className="rounded-l-lg"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "500/300",
-                  objectFit: "cover",
-                }}
-                width="300"
-              />
+            <img
+              alt="Canada Day"
+              className="w-full"
+              height="200"
+              src="/placeholder.svg"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
             </CardHeader>
             <CardContent>
               <h2 className="text-xl font-semibold mb-2">Canada day, July 1.</h2>
@@ -59,17 +59,18 @@ export default function MonthlyCalendar() {
         <Card className="w-full">
           <div className="flex">
             <CardHeader>
-              <img
-                alt="Taiwanese Cultural Festival"
-                className="rounded-l-lg"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "500/300",
-                  objectFit: "cover",
-                }}
-                width="300"
-              />
+            <img
+              alt="Canada Day"
+              className="w-full"
+              height="200"
+              src="/placeholder.svg"
+              // src="..\src\assets\EventsPics\Taiwanese Cultural Festival.png"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
             </CardHeader>
             <CardContent>
               <h2 className="text-xl font-semibold mb-2">Taiwanese Cultural Festival, July 1 - 3.</h2>
