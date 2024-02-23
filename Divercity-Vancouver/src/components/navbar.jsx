@@ -1,11 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from  "./ui/input";
 import { Button } from "./ui/button";
 import { NavLink, useLocation, Link } from 'react-router-dom';
-import { CalendarIcon, EventIcon, HomeIcon, SearchIcon } from "./homepageIcon.jsx";
+import { CalendarIcon, EventIcon, HomeIcon, ProfileIcon, SearchIcon } from "./homepageIcon.jsx";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function Navbar() {
+
   const location = useLocation();
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userid');
+    setUserId(userId);
+  }, [])
+  
+  const handleSignOut = () => {
+    signOut(getAuth())
+      .then(() => {
+        // Sign-out successful.
+        localStorage.removeItem('userid'); // Remove user ID from local storage
+        setUserId(null); // Update state to reflect sign-out
+        window.location.reload();
+      })
+      .catch((error) => {
+        // An error happened.
+        console.error('Sign-out error:', error);
+      });
+  };
+  
+
+
   return (
     <nav className="bg-bluee py-4">
     <div className="container mx-auto flex items-center justify-between px-4">
@@ -49,14 +74,21 @@ export default function Navbar() {
           />
         </div>
       </div>
-      <div className="flex items-center space-x-4 ml-5">
+
+      {
+        !userId ? <div className="flex items-center space-x-4 ml-5">
         <Link to={'/signup'}>
           <Button className="bg-bluee w-24 h-10 px-2 text-l text-white rounded-lg shadow-lg">Sign Up</Button>
         </Link>
         <Link to={'/login'}>
           <Button className="bg-bluee text-l text-white rounded-lg shadow-lg">Login</Button>
         </Link>
-      </div>
+      </div> : 
+      // <ProfileIcon /> 
+        <Button onClick={handleSignOut}>Sign out</Button>
+
+      }
+      
     </div>
   </nav>
   )

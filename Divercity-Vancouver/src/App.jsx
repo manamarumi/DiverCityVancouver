@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Homepage from './pages/Homepage/homepage';
 import UserLoginhomepage from './pages/Homepage/userLoginhomepage';
 import Admin from './pages/Admin/admin';
@@ -13,14 +13,30 @@ import Loginpage from './pages/Customer/Login/Login';
 import MonthlyCalendar from './pages/MonthlyCalendar/monthlyCalendar';
 import Calendar from './pages/Calendar/calendar';
 import UserDetails from './pages/Admin/userdetails';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function App() {
+
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      localStorage.setItem('userid', JSON.stringify(uid));
+      // ...
+    } else {
+      // User is signed out
+      // ...
+      localStorage.removeItem('user');
+    }
+  });
+
   return (
     <div>
       <Router>
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/home/userLogin" element={<UserLoginhomepage />} />
           <Route path="/login" element={<Loginpage />} />
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/calendar" element={<Calendar />} />

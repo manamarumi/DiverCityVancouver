@@ -30,7 +30,7 @@ export default function Loginpage() {
         const user = userCredential.user;
         if (user) {
           // Redirect to home page or wherever you want
-          navigate('/home/userLogin');
+          navigate('/');
         }
       })
       .catch((error) => {
