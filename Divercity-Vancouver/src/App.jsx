@@ -14,6 +14,8 @@ import MonthlyCalendar from './pages/MonthlyCalendar/monthlyCalendar';
 import Calendar from './pages/Calendar/calendar';
 import UserDetails from './pages/Admin/userdetails';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import ExploreEvent from './pages/ExploreEvent/ExploreEvent';
+import ExploreNews from './pages/ExploreNews/ExploreNews';
 
 function App() {
 
@@ -49,7 +51,8 @@ function App() {
           <Route path="/admin/editevent" element={<Editevents />} />
           <Route path="/admin/postnews" element={<Postnews />} />
           <Route path="/admin/editnews" element={<Editnews />} />
-
+          <Route path="/news/explore/news" element={<ExploreNews/>} />
+          <Route path="/events/explore/event" element={<ExploreEvent/>} />
         </Routes>
       </Router>
     </div>
