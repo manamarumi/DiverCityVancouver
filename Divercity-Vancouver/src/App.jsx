@@ -10,7 +10,7 @@ import Postnews from './pages/Admin/postnews';
 import Editnews from './pages/Admin/editnews';
 import Signuppage from './pages/Customer/Signuppage/signuppage';
 import Loginpage from './pages/Customer/Login/Login';
-import MonthlyCalendar from './pages/MonthlyCalendar/monthlyCalendar';
+import MonthlyEventView from './pages/MonthlyEventView/MonthlyEventView';
 import Calendar from './pages/Calendar/calendar';
 import UserDetails from './pages/Admin/userdetails';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -42,8 +42,8 @@ function App() {
           <Route path="/login" element={<Loginpage />} />
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/calendar" element={<Calendar />} />
-          <Route path="/calendar/monthlycalendar" element={<MonthlyCalendar />} />
-          <Route path="/events" element={<MonthlyCalendar />} />
+          <Route path="/events" element={<MonthlyEventView />} />
+          <Route path="/events/:month" element={<MonthlyEventView />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/userinfo" element={<Adminpage />} />
           <Route path="/admin/userdetails/:username" element={<UserDetails />} />
