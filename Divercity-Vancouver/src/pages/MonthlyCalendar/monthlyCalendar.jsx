@@ -1,63 +1,33 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { CardHeader, CardContent, Card } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import canadaday from "../../assets/monthlycalendarpics/canadaday.jpg";
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase';
 
-const EventsData = [
-  {
-    id: 1,
-    title: "Canada Day",
-    description: `The Canada Day event returned with in-person concerts and celebrations in 2022. However, the event was
-                  different from what it was before the pandemic. There were no fireworks that year and there weren't any
-                  either in 2023 as Vancouver's annual July 1st pyrotechnic show has now been permanently cancelled.`,
-    address: "Vancouver",
-    isPremium: false,
-    date: "21st September 2024",
-    image: canadaday,
-  },
-  {
-    id: 1,
-    title: "Canada Day",
-    description: `The Canada Day event returned with in-person concerts and celebrations in 2022. However, the event was
-                  different from what it was before the pandemic. There were no fireworks that year and there weren't any
-                  either in 2023 as Vancouver's annual July 1st pyrotechnic show has now been permanently cancelled.`,
-    address: "Vancouver",
-    isPremium: false,
-    date: "21st September 2024",
-    image: canadaday,
-  },
-  {
-    id: 1,
-    title: "Canada Day",
-    description: `The Canada Day event returned with in-person concerts and celebrations in 2022. However, the event was
-                  different from what it was before the pandemic. There were no fireworks that year and there weren't any
-                  either in 2023 as Vancouver's annual July 1st pyrotechnic show has now been permanently cancelled.`,
-    address: "Vancouver",
-    isPremium: false,
-    date: "21st September 2024",
-    image: canadaday,
-  },
-  {
-    id: 1,
-    title: "Canada Day",
-    description: `The Canada Day event returned with in-person concerts and celebrations in 2022. However, the event was
-                  different from what it was before the pandemic. There were no fireworks that year and there weren't any
-                  either in 2023 as Vancouver's annual July 1st pyrotechnic show has now been permanently cancelled.`,
-    address: "Vancouver",
-    isPremium: false,
-    date: "21st September 2024",
-    image: canadaday,
-  },
-];
 
-export default function MonthlyCalendar() {
+
+export default function MonthlyCalendar() {  
+  const [events, setEvents] = useState([]);
   const navigate = useNavigate();
 
   const exploreEvent = (id) => {
     navigate(`/events/explore/event/${id}`);
   };
+
+  useEffect(() => {
+    const getEvents = async () => {
+      const eventCollection = collection(db, 'event'); // 'users' should be your user collection name
+      const eventSnapshot = await getDocs(eventCollection);
+      const eventList = eventSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setEvents(eventList);
+    };
+
+    getEvents();
+  }, []);
+
 
   return (
     <div>
@@ -70,16 +40,16 @@ export default function MonthlyCalendar() {
           <h1 className="text-3xl font-bold">Upcoming Events in July</h1>
         </div>
         <div className="grid grid-cols-1 gap-6">
-          {EventsData.map((event) => {
+          {events.map((event, index) => {
             return (
-              <Card className="w-full">
+              <Card className="w-full" key={index}>
                 <div className="flex">
                   <CardHeader>
                     <img
                       alt="Canada Day"
                       className="w-full"
                       height="200"
-                      src={canadaday}
+                      src={event.event_image}
                       style={{
                         aspectRatio: "300/200",
                         objectFit: "cover",
@@ -95,11 +65,11 @@ export default function MonthlyCalendar() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <ClockIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.date}</span>
+                        <span>{event.start_datetime.toDate().toLocaleDateString()}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <LocateIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.address}</span>
+                        <span>{event.location}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <CurrencyIcon className="h-5 w-5 text-gray-500" />
