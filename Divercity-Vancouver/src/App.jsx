@@ -52,7 +52,7 @@ function App() {
           <Route path="/admin/postnews" element={<Postnews />} />
           <Route path="/admin/editnews" element={<Editnews />} />
           <Route path="/news/explore/news" element={<ExploreNews/>} />
-          <Route path="/events/explore/event" element={<ExploreEvent/>} />
+          <Route path="/events/explore/:id" element={<ExploreEvent/>} />
         </Routes>
       </Router>
     </div>
