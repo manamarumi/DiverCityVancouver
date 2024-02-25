@@ -1,33 +1,33 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { CardHeader, CardContent, Card } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
-import canadaday from "../../assets/monthlycalendarpics/canadaday.jpg";
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
-
-
-export default function MonthlyCalendar() {  
+export default function MonthlyCalendar() {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
+  const currentMonth = new Date().toLocaleString("default", { month: "long" });
 
   const exploreEvent = (id) => {
-    navigate(`/events/explore/event/${id}`);
+    navigate(`/events/explore/${id}`);
   };
 
   useEffect(() => {
     const getEvents = async () => {
-      const eventCollection = collection(db, 'event'); // 'users' should be your user collection name
+      const eventCollection = collection(db, "event");
       const eventSnapshot = await getDocs(eventCollection);
-      const eventList = eventSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const eventList = eventSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setEvents(eventList);
     };
 
     getEvents();
   }, []);
-
 
   return (
     <div>
@@ -37,106 +37,54 @@ export default function MonthlyCalendar() {
           <Link to={"/calendar"}>
             <ArrowLeftIcon className="text-blue-500 h-6 w-6" />
           </Link>
-          <h1 className="text-3xl font-bold">Upcoming Events in July</h1>
+          <h1 className="text-3xl font-bold">
+            Upcoming Events in {currentMonth}
+          </h1>
         </div>
         <div className="grid grid-cols-1 gap-6">
-          {events.map((event, index) => {
-            return (
-              <Card className="w-full" key={index}>
-                <div className="flex">
-                  <CardHeader>
-                    <img
-                      alt="Canada Day"
-                      className="w-full"
-                      height="200"
-                      src={event.event_image}
-                      style={{
-                        aspectRatio: "300/200",
-                        objectFit: "cover",
-                      }}
-                      width="300"
-                    />
-                  </CardHeader>
-                  <CardContent>
-                    <h2 className="text-xl font-semibold mb-2">
-                      {event.title}
-                    </h2>
-                    <p className="text-gray-600 mb-4">{event.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <ClockIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.start_datetime.toDate().toLocaleDateString()}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <LocateIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.location}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <CurrencyIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.isPremium ? "Paid" : "Free"}</span>
-                      </div>
-                      <Button
-                        className="bg-blue-500 hover:bg-blue-600 text-white"
-                        onClick={() => exploreEvent(event.id)}
-                      >
-                        Explore
-                      </Button>
+          {events.map((event, index) => (
+            <Card className="w-full" key={index}>
+              <div className="flex">
+                <CardHeader>
+                  <img
+                    alt="Event"
+                    className="w-full"
+                    src={event.event_image}
+                    style={{
+                      height: "200px", 
+                      width: "200px", 
+                    }}
+                  />
+                </CardHeader>
+                <CardContent>
+                  <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
+                  <p className="text-gray-600 mb-4">{event.description}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <ClockIcon className="h-5 w-5 text-gray-500" />
+                      <span>
+                        {event.start_datetime.toDate().toLocaleDateString()}
+                      </span>
                     </div>
-                  </CardContent>
-                </div>
-              </Card>
-            );
-          })}
-          <Card className="w-full">
-            <div className="flex">
-              <CardHeader>
-                <img
-                  alt="Canada Day"
-                  className="w-full"
-                  height="200"
-                  src={canadaday}
-                  style={{
-                    aspectRatio: "300/200",
-                    objectFit: "cover",
-                  }}
-                  width="300"
-                />
-              </CardHeader>
-              <CardContent>
-                <h2 className="text-xl font-semibold mb-2">
-                  Canada day, July 1.
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  The Canada Day event returned with in-person concerts and
-                  celebrations in 2022. However, the event was different from
-                  what it was before the pandemic. There were no fireworks that
-                  year and there weren't any either in 2023 as Vancouver's
-                  annual July 1st pyrotechnic show has now been permanently
-                  cancelled.
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <ClockIcon className="h-5 w-5 text-gray-500" />
-                    <span>11:00 AM - 1:00 PM, July 1st, 2024</span>
+                    <div className="flex items-center space-x-2">
+                      <LocateIcon className="h-5 w-5 text-gray-500" />
+                      <span>{event.location}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CurrencyIcon className="h-5 w-5 text-gray-500" />
+                      <span>{event.isPremium ? "Paid" : "Free"}</span>
+                    </div>
+                    <Button
+                      className="bg-blue-500 hover:bg-blue-600 text-white"
+                      onClick={() => exploreEvent(event.id)}
+                    >
+                      Explore
+                    </Button>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <LocateIcon className="h-5 w-5 text-gray-500" />
-                    <span>Georgia & Broughton, 1234 Georgia St</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <CurrencyIcon className="h-5 w-5 text-gray-500" />
-                    <span>Free</span>
-                  </div>
-                  <Button
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                    onClick={exploreEvent}
-                  >
-                    Explore
-                  </Button>
-                </div>
-              </CardContent>
-            </div>
-          </Card>
+                </CardContent>
+              </div>
+            </Card>
+          ))}
         </div>
       </div>
     </div>
