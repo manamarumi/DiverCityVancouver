@@ -26,7 +26,7 @@ const Signuppage = () => {
   
         const userData = {
           email: user.email,
-          date_created: Timestamp.fromDate(new Date()), 
+          date_created: Timestamp.fromDate(new Date()),
           last_login: Timestamp.fromDate(new Date()),
           name: document.getElementById('name').value,
           isAdmin: false,
