@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
 
-
 export default function Postevents() {
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -20,7 +19,7 @@ export default function Postevents() {
   const [eventLocation, setEventLocation] = useState('');
   const [eventCost, setEventCost] = useState('');
   const [isPremium, setIsPremium] = useState(false);
-
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const handleUpload = async () => {
     const event = {
@@ -37,11 +36,17 @@ export default function Postevents() {
     try {
       const docRef = await addDoc(collection(db, 'event'), event);
       console.log("Document written with ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding document: ", error);
-  }
-}
-;
+      setUploadSuccess(true);
+      // Clear all input fields after 3 seconds
+      setTimeout(() => {
+        clearInputs();
+        setUploadSuccess(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -59,7 +64,17 @@ export default function Postevents() {
     setSelectedImage(null);
   };
 
-  
+  const clearInputs = () => {
+    setEventName('');
+    setEventDetails('');
+    setEventStart('');
+    setEventEnd('');
+    setEventLocation('');
+    setEventCost('');
+    setIsPremium(false);
+    setSelectedImage(null);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <AdminNavber />
@@ -77,28 +92,25 @@ export default function Postevents() {
         </div>
         <div className='p-5 border border-black rounded-lg'>
           <div className="flex flex-col space-y-4">
-            <div className="relative">
-              <div className="flex flex-col items-center justify-center border-dashed border-2 rounded-lg h-96 mb-6">
+            {uploadSuccess ? (
+              <div className="flex items-center justify-center h-96">
+                <p className="text-green-500 text-2xl">Upload successful</p>
+              </div>
+            ) : (
+              <div className="relative flex flex-col items-center justify-center border-dashed border-2 rounded-lg h-96 mb-6">
                 {selectedImage ? (
                   <img src={selectedImage} alt="Uploaded Event" className="h-full w-full object-fit rounded-lg" />
                 ) : (
                   <>
-                    <PlusIcon className="h-24 w-24 text-gray-400" />
-                    <p className="text-gray-400">Click to add picture</p>
-                    <Button className="absolute top-0 left-0 w-full h-full opacity-0" variant="ghost">
-                      <input type="file" id="upload-photo" name="upload-photo" accept="image/*" onChange={handleImageUpload} />
-                    </Button>
+                    <label htmlFor="upload-photo" className="cursor-pointer flex flex-col items-center justify-center">
+                      <PlusIcon className="h-24 w-24 text-gray-400 mb-2" />
+                      <p className="text-gray-400">Click to add picture</p>
+                    </label>
+                    <input type="file" id="upload-photo" name="upload-photo" accept="image/*" onChange={handleImageUpload} className="hidden" />
                   </>
                 )}
               </div>
-              {selectedImage && (
-                <button onClick={handleImageRemove} className="absolute top-2 right-2 text-red-500 bg-white rounded-full p-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
+            )}
             <Input placeholder="Event name, place" value={eventName} onChange={e => setEventName(e.target.value)} />
             <Textarea placeholder="Details text of the event." value={eventDetails} onChange={e => setEventDetails(e.target.value)} />
             <div className="grid grid-cols-1 grid-cols-5 gap-4">
@@ -107,7 +119,7 @@ export default function Postevents() {
               <Input className="flex-grow" placeholder="Type in the place of the event." value={eventLocation} onChange={e => setEventLocation(e.target.value)} />
               <Input className="flex-grow" placeholder="Type in the cost of the event." value={eventCost} onChange={e => setEventCost(e.target.value)} />
               <div className="flex flex-col items-center flex-grow">
-              <Switch id="event-premium" checked={isPremium} onCheckedChange={setIsPremium} />
+                <Switch id="event-premium" checked={isPremium} onCheckedChange={setIsPremium} />
                 <Label className="ml-2" htmlFor="event-premium">
                   Is this event premium?
                 </Label>
@@ -120,7 +132,7 @@ export default function Postevents() {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
 function Signout(props) {
@@ -137,7 +149,6 @@ function Signout(props) {
     </svg>
   );
 }
-
 
 function PlusIcon(props) {
   return (
@@ -156,5 +167,5 @@ function PlusIcon(props) {
       <path d="M5 12h14" />
       <path d="M12 5v14" />
     </svg>
-  )
+  );
 }

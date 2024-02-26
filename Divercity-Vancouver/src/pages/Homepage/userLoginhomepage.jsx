@@ -2,9 +2,10 @@ import React from 'react';
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Link } from 'react-router-dom';
-import { CalendarIcon, EventIcon, HomeIcon, SearchIcon, ProfileIcon } from "../../components/homepageIcon.jsx";
+import { CalendarIcon, EventIcon, HomeIcon, SearchIcon, ProfileIcon, HeartIcon } from "../../components/homepageIcon.jsx";
 import backgroundImage from "../../assets/homepage_background.jpg";
 import homepageIcon from "../../assets/homepage_icon.png";
+import { Card, CardContent } from '../../components/ui/card';
 
 export default function userLoginHomepage() {
   return (
@@ -81,7 +82,162 @@ export default function userLoginHomepage() {
             </Link>
           </div>
         </div>
-      </div>
+      </div>      
+      <main className="p-4">
+        <h2 className="text-3xl font-bold text-center mb-6">Trending News</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="w-full">
+            <img
+              alt="News 1"
+              className="w-full rounded-t-lg"
+              height="200"
+              src="../../src/assets/monthlycalendarpics/dec.jpg"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
+            <CardContent>
+              <h3 className="font-bold">News - Title 1</h3>
+              <p className="text-gray-600">"Neque porro quisquam est, qui dolorem ipsum quia."</p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <HeartIcon className="h-6 w-6 text-pink-500" />
+                  <span className="ml-1">72</span>
+                </div>
+                <Button variant="ghost">Read more</Button>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="w-full">
+            <img
+              alt="News 2"
+              className="w-full rounded-t-lg"
+              height="200"
+              src="../../src/assets/monthlycalendarpics/aug.jpeg"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
+            <CardContent>
+              <h3 className="font-bold">News - Title 2</h3>
+              <p className="text-gray-600">"Neque porro quisquam est, qui dolorem ipsum quia."</p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <HeartIcon className="h-6 w-6 text-pink-500" />
+                  <span className="ml-1">72</span>
+                </div>
+                <Button variant="ghost">Read more</Button>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="w-full">
+            <img
+              alt="News 3"
+              className="w-full rounded-t-lg"
+              height="200"
+              src="../../src/assets/monthlycalendarpics/april.jpg"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
+            <CardContent>
+              <h3 className="font-bold">News - Title 3</h3>
+              <p className="text-gray-600">"Neque porro quisquam est, qui dolorem ipsum quia."</p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <HeartIcon className="h-6 w-6 text-pink-500" />
+                  <span className="ml-1">72</span>
+                </div>
+                <Button variant="ghost">Read more</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+      <main className="p-4">
+        <h2 className="text-3xl font-bold text-center mb-6">Most Liked Events</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="w-full">
+            <img 
+              alt="News 1"
+              className="w-full rounded-t-lg"
+              height="200"
+              src="../../src/assets/monthlycalendarpics/january.jpeg"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
+            <CardContent>
+              <h3 className="font-bold">Events - Title 1</h3>
+              <p className="text-gray-600">"Neque porro quisquam est, qui dolorem ipsum quia."</p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <HeartIcon className="h-6 w-6 text-pink-500" />
+                  <span className="ml-1">72</span>
+                </div>
+                <Button variant="ghost">Read more</Button>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="w-full">
+            <img
+              alt="News 2"
+              className="w-full rounded-t-lg"
+              height="200"
+              src="../../src/assets/monthlycalendarpics/february.jpg"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
+            <CardContent>
+              <h3 className="font-bold">Events - Title 2</h3>
+              <p className="text-gray-600">" Neque porro quisquam est, qui dolorem ipsum quia."</p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <HeartIcon className="h-6 w-6 text-pink-500" />
+                  <span className="ml-1">72</span>
+                </div>
+                <Button variant="ghost">Read more</Button>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="w-full">
+            <img
+              alt="News 3"
+              className="w-full rounded-t-lg"
+              height="200"
+              src="../../src/assets/monthlycalendarpics/march.jpg"
+              style={{
+                aspectRatio: "300/200",
+                objectFit: "cover",
+              }}
+              width="300"
+            />
+            <CardContent>
+              <h3 className="font-bold">Events - Title 3</h3>
+              <p className="text-gray-600">"Neque porro quisquam est, qui dolorem ipsum quia."</p>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center">
+                  <HeartIcon className="h-6 w-6 text-pink-500" />
+                  <span className="ml-1">72</span>
+                </div>
+                <Button variant="ghost">Read more</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
     </div>
   );
 }
+

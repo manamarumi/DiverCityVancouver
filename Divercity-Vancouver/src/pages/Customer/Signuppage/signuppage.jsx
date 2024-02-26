@@ -2,26 +2,15 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import signupImage from '../../../assets/signuppics/SignupImage.jpg';
-=======
-import signupImage from '../../../assets/signuppics/signupImage.jpg';
-
->>>>>>> d01668265090cf4d3ca207e55c01b0e9dc74421f
 import googleIcon from '../../../assets/signuppics/googleIcon.png'; // Import the Google icon image
-
 import { createUserWithEmailAndPassword, signInWithPopup , GoogleAuthProvider } from "firebase/auth";
 import { auth, db  } from '../../../firebase';
-import { addDoc , collection, Timestamp } from 'firebase/firestore';
-
-
-
+import { doc, setDoc , collection, Timestamp } from 'firebase/firestore';
 
 const Signuppage = () => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();  
 
   const handleSignup = async (event) => {
@@ -37,14 +26,14 @@ const Signuppage = () => {
   
         const userData = {
           email: user.email,
-          date_created: Timestamp.fromDate(new Date()),
+          date_created: Timestamp.fromDate(new Date()), 
           last_login: Timestamp.fromDate(new Date()),
-          name: document.getElementById('name').value,          
+          name: document.getElementById('name').value,
           isAdmin: false,
         };
           
-        const docRef = await addDoc(collection(db, 'users'), userData);
-        console.log("Document written with ID: ", docRef.id);
+        await setDoc(doc(db, 'users', user.uid), userData);
+        console.log("Document written with ID: ", user.uid);
         alert('User Registered successfully');
         navigate('/login');
       }
@@ -71,13 +60,13 @@ const Signuppage = () => {
         email: user.email,
         date_created: Timestamp.fromDate(new Date()),
         last_login: Timestamp.fromDate(new Date()),
-        name: user.displayName, // Use Google's display name       
+        name: user.displayName, // Use Google's display name
         isAdmin: false,
         isSubscribed: false
       };
   
-      const docRef = await addDoc(collection(db, 'users'), userData);
-      console.log("Document written with ID: ", docRef.id);
+      await setDoc(doc(db, 'users', user.uid), userData);
+      console.log("Document written with ID: ", user.uid);
   
       // Navigate to the desired page after successful signup
       navigate('/');
@@ -89,8 +78,6 @@ const Signuppage = () => {
       alert(errorMessage);
     }
   };
-  
-
 
   return (
     <div className="flex h-screen items-center justify-center">

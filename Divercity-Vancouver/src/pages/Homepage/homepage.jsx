@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import backgroundImage from "../../assets/homepage_background.jpg";
 import homepageIcon from "../../assets/homepage_icon.png";
-import { Link } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 import { Button } from '../../components/ui/button';
 
 
-
 export default function Homepage() {
+
+  const location = useLocation();
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userid');
+    setUserId(userId);
+  }, [])
+  
+
   return (
     <div>
       <Navbar/>
@@ -22,18 +31,23 @@ export default function Homepage() {
             <p className="text-3xl text-gray-900 mt-4">
               The platform for Vancouver events
             </p>
+            {
+              !userId ?
             <Link to={'/signup'}>
               <Button className="mt-16 bg-bluee text-l text-white px-20 py-2 rounded-lg shadow-lg">
                 Join DiverCity!
               </Button>
-            </Link>
+            </Link>:<Link to={'/events'}>
+              <Button className="mt-16 bg-bluee text-l text-white px-20 py-2 rounded-lg shadow-lg">
+                Explore DiverCity!
+              </Button>
+            </Link>              
+            }
+            
+
           </div>
         </div>
       </div>
       </div>
       )
 }
-
-
-
-
