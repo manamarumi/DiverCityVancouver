@@ -1,57 +1,77 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/navbar";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function ExploreEvent() {
+  const { id } = useParams();
+  const [event, setEvent] = useState(null);
+
+  useEffect(() => {
+    const getEvent = async () => {
+      const eventRef = doc(db, "event", id);
+      const eventDoc = await getDoc(eventRef);
+      if (eventDoc.exists()) {
+        setEvent({ id: eventDoc.id, ...eventDoc.data() });
+      } else {
+        // Handle event not found
+        console.log("Event not found");
+      }
+    };
+
+    getEvent();
+  }, [id]);
+
+  if (!event) {
+    return <div>Loading...</div>; // You can display a loader while fetching the event
+  }
+
   return (
     <div>
       <Navbar />
-      <div key="1" className="max-w-7xl mx-auto">
+      <div key={event.id} className="max-w-7xl mx-auto">
         <div className="flex items-center space-x-4">
-        <Link to={'/events'} >
-        <ArrowLeftIcon className="text-blue-500 h-6 w-6" />
-        </Link>
+          <Link to={"/events"}>
+            <ArrowLeftIcon className="text-blue-500 h-6 w-6" />
+          </Link>
         </div>
         <div className="my-6">
           <img
             alt="Event"
             className="rounded-lg"
             height="300"
-            src="/placeholder.svg"
+            src={event.event_image}
             style={{
               aspectRatio: "1343/300",
               objectFit: "cover",
             }}
             width="1343"
           />
-        </div>
-        <h1 className="text-4xl font-bold">Canada Cup, Vancouver</h1>
-        <p className="mt-4 text-lg">
-          The Canada Cup International Softball Championship is operated by the
-          Canadian Amateur Sport Society, a registered not-for-profit society
-          dedicated to advocating and encouraging the development of the sport
-          of softball by staging a first class, family oriented elite
-          international fastpitch event.
-        </p>
-        <div className="flex flex-wrap items-center gap-4 mt-6">
-          <ClockIcon className="text-gray-500 h-6 w-6" />
-          <p>11:00 AM - 1:00 PM, July 21st, 2024</p>
-          <MapPinIcon className="text-gray-500 h-6 w-6" />
-          <p>Expo & Pacific, 1254 Expo Ave</p>
-          <DollarSignIcon className="text-gray-500 h-6 w-6" />
-          <p>$25 Per person OR Free with subscription</p>
-          <button className="p-2">
-            <BookmarkIcon className="h-6 w-6" />
-          </button>
-          <button className="p-2">
-            <HeartIcon className="h-6 w-6" />
-          </button>
-          <span>72</span>
+          <h1 className="text-4xl font-bold">{event.title}</h1>
+          <p className="mt-4 text-lg">{event.description}</p>
+          <div className="flex flex-wrap items-center gap-4 mt-6">
+            <ClockIcon className="text-gray-500 h-6 w-6" />
+            <p>{event.start_datetime.toDate().toLocaleString()}</p>
+            <MapPinIcon className="text-gray-500 h-6 w-6" />
+            <p>{event.location}</p>
+            <DollarSignIcon className="text-gray-500 h-6 w-6" />
+            <p>{event.isPremium ? "Paid" : "Free"}</p>
+            <button className="p-2">
+              <BookmarkIcon className="h-6 w-6" />
+            </button>
+            <button className="p-2">
+              <HeartIcon className="h-6 w-6" />
+            </button>
+            <span>72</span>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+
 
 function BookmarkIcon(props) {
   return (

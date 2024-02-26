@@ -3,72 +3,81 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import signupImage from '../../../assets/signuppics/SignupImage.jpg';
-
 import googleIcon from '../../../assets/signuppics/googleIcon.png'; // Import the Google icon image
-
 import { createUserWithEmailAndPassword, signInWithPopup , GoogleAuthProvider } from "firebase/auth";
-import { auth } from '../../../firebase';
+import { auth, db  } from '../../../firebase';
+import { doc, setDoc , collection, Timestamp } from 'firebase/firestore';
 
 const Signuppage = () => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();  
 
-  const navigate = useNavigate();
-
-  const handleSignup = (event) => {
-
+  const handleSignup = async (event) => {
     event.preventDefault();
+  
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      if (user) {        
+        alert('User Registered successfully');
+        navigate('/login');
+  
+        const userData = {
+          email: user.email,
+          date_created: Timestamp.fromDate(new Date()),
+          last_login: Timestamp.fromDate(new Date()),
+          name: document.getElementById('name').value,
+          isAdmin: false,
+        };
+          
+        await setDoc(doc(db, 'users', user.uid), userData);
+        console.log("Document written with ID: ", user.uid);
+        alert('User Registered successfully');
+        navigate('/login');
+      }
+    } catch (error) {
+      const errorMessage = error.message;
+      console.error("Error adding document: ", errorMessage);
+      alert(errorMessage);
+    }
+  };
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up 
-        const user = userCredential.user;
-
-        if (user) {
-          alert('User Registered successfully');
-          navigate('/login');
-        }
-
-        // save the name in the Firebase collection for this particular user
-        // {YOUR CODE SHOULD GO HERE}
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-
-        alert(errorMessage);
-      });
-  }
-
-  const handleSignupwithGoogle = (event) => {
-
+  const handleSignupwithGoogle = async (event) => {
     event.preventDefault();
-
+  
     const provider = new GoogleAuthProvider();
-
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-        navigate('/');
-      }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
-
-  }
-
+  
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+  
+      // Save user data to the database
+      const userData = {
+        email: user.email,
+        date_created: Timestamp.fromDate(new Date()),
+        last_login: Timestamp.fromDate(new Date()),
+        name: user.displayName, // Use Google's display name
+        isAdmin: false,
+        isSubscribed: false
+      };
+  
+      await setDoc(doc(db, 'users', user.uid), userData);
+      console.log("Document written with ID: ", user.uid);
+  
+      // Navigate to the desired page after successful signup
+      navigate('/');
+    } catch (error) {
+      // Handle errors
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error("Error signing up with Google: ", errorCode, errorMessage);
+      alert(errorMessage);
+    }
+  };
 
   return (
     <div className="flex h-screen items-center justify-center">

@@ -104,4 +104,3 @@ function HeartIcon(props) {
     </svg>
   );
 }
-
