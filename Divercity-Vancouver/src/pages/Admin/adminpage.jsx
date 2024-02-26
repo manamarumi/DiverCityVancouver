@@ -3,12 +3,14 @@ import { Input } from "../../components/ui/input.jsx";
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "../../components/ui/table.jsx";
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import AdminNavber from "../../components/adminNavber.jsx";
 
 export default function Adminpage() {
   const [users, setUsers] = useState([]);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [userToDeleteId, setUserToDeleteId] = useState(null);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -21,57 +23,80 @@ export default function Adminpage() {
     getUsers();
   }, []);
 
+  const handleDeleteUser = async () => {
+    try {
+      await deleteDoc(doc(db, 'users', userToDeleteId));
+      setUsers(users.filter(user => user.id !== userToDeleteId));
+      setShowDeleteConfirmation(false);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
-    <AdminNavber/>
-    <main className="flex-1 p-5">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold">User Information</h2>
-        <Link to={'/'}>
-          <Button className="bg-bluee rounded-lg shadow-lg h-13">
-            <div>
-              <div className="flex items-center justify-center">
-                <Signout />
+      <AdminNavber />
+      <main className="flex-1 p-5">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-semibold">User Information</h2>
+          <Link to={'/'}>
+            <Button className="bg-bluee rounded-lg shadow-lg h-13">
+              <div>
+                <div className="flex items-center justify-center">
+                  <Signout />
+                </div>
+                <p>Sign Out</p>
               </div>
-              <p>Sign Out</p>
-            </div>
-          </Button>
-        </Link>
-      </div>
-      <div className="bg-white p-5 shadow rounded-lg mb-6">
-        <div>
-          <Input placeholder="Search User" />
+            </Button>
+          </Link>
         </div>
+        <div className="bg-white p-5 shadow rounded-lg mb-6">
+          <div>
+            <Input placeholder="Search User" />
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
               <TableHead>User Name</TableHead>
-                <TableHead>User ID</TableHead>
-                <TableHead>Date Created</TableHead>                
-                <TableHead>Subscriber</TableHead>
-                <TableHead>Last Logged in</TableHead>
-                <TableHead>Delete User</TableHead>
+              <TableHead>User ID</TableHead>
+              <TableHead>Date Created</TableHead>
+              <TableHead>Subscriber</TableHead>
+              <TableHead>Last Logged in</TableHead>
+              <TableHead>Delete User</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map((user, index) => (
+              <TableRow key={index}>
+                <TableCell><Link to={`/admin/userdetails/${user.name}`} className="underline">{user.name}</Link></TableCell>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>{user.date_created.toDate().toLocaleDateString()}</TableCell>
+                <TableCell>{user.isSubscribed ? 'Yes' : 'No'}</TableCell>
+                <TableCell>{user.last_login.toDate().toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <Button variant="destructive" onClick={() => {
+                    setUserToDeleteId(user.id);
+                    setShowDeleteConfirmation(true);
+                  }}>Delete</Button>
+                  {showDeleteConfirmation && (
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                      <div className="bg-white p-8 rounded shadow w-80">
+                        <h3 className="text-lg font-semibold mb-4 text-center">Delete this user?</h3>
+                        <div className="flex justify-center gap-10">
+                          <Button variant="destructive" className="w-20" onClick={handleDeleteUser}>Yes</Button>
+                          <Button className="bg-gray-400 w-20" onClick={() => setShowDeleteConfirmation(false)}>No</Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>             
-                 {users.map((user, index) => (
-                   <TableRow key={index}>
-                   <TableCell><Link to={`/admin/userdetails/${user.name}`} className="underline">{user.name}</Link></TableCell>
-                   <TableCell>{user.id}</TableCell>
-                   <TableCell>{user.date_created.toDate().toLocaleDateString()}</TableCell>                  
-                   <TableCell>{user.isSubscribed ? 'Yes' : 'No'}</TableCell>
-                   <TableCell>{user.last_login.toDate().toLocaleDateString()}</TableCell>
-                   <TableCell>
-                     <Button variant="destructive">Delete</Button>
-                   </TableCell>
-                 </TableRow>
-               ))}
-             </TableBody>
-          </Table>
-        </main>
-      </div>    
+            ))}
+          </TableBody>
+        </Table>
+      </main>
+    </div>
   )
 }
 

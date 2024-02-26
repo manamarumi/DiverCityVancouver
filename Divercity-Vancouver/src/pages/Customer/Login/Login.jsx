@@ -26,7 +26,7 @@ export default function Loginpage() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
+        // Signed in       
         const user = userCredential.user;
         if (user) {
           // Redirect to home page or wherever you want
