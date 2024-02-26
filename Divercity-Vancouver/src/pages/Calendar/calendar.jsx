@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 
 
+
+
+
 export default function Calendar() {
     return (
         <div>
@@ -10,7 +13,7 @@ export default function Calendar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-4xl font-bold text-center mb-10">Monthly Event Calendar</h1>
         <div className="grid grid-cols-4 gap-6">
-          <Link to={'/calendar/monthlycalendar'}>
+          <Link to={'/events/January'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="January Event"
