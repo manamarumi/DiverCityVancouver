@@ -11,10 +11,12 @@ export default function Adminpage() {
   const [users, setUsers] = useState([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [userToDeleteId, setUserToDeleteId] = useState(null);
+  const [filteredUsers, setFilteredUsers] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const getUsers = async () => {
-      const userCollection = collection(db, 'users'); // 'users' should be your user collection name
+      const userCollection = collection(db, 'users');
       const userSnapshot = await getDocs(userCollection);
       const userList = userSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setUsers(userList);
@@ -22,6 +24,19 @@ export default function Adminpage() {
 
     getUsers();
   }, []);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  useEffect(() => {
+    filterUsers();
+  }, [searchTerm, users]);
+
+  const filterUsers = () => {
+    const filtered = users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    setFilteredUsers(filtered);
+  };
 
   const handleDeleteUser = async () => {
     try {
@@ -52,7 +67,7 @@ export default function Adminpage() {
         </div>
         <div className="bg-white p-5 shadow rounded-lg mb-6">
           <div>
-            <Input placeholder="Search User" />
+            <Input onChange={handleSearch} placeholder="Search User" />
           </div>
         </div>
         <Table>
@@ -67,7 +82,7 @@ export default function Adminpage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user, index) => (
+            {filteredUsers.map((user, index) => (
               <TableRow key={index}>
                 <TableCell><Link to={`/admin/userdetails/${user.name}`} className="underline">{user.name}</Link></TableCell>
                 <TableCell>{user.id}</TableCell>
