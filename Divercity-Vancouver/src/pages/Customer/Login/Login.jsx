@@ -3,7 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from '../../../firebase';
+import { auth, db } from '../../../firebase'; 
+import { doc, updateDoc } from 'firebase/firestore';
 
 import placeholder from '../../../assets/placeholder.jpg';
 import googleIcon from '../../../assets/signuppics/googleIcon.png';
@@ -25,10 +26,11 @@ export default function Loginpage() {
     e.preventDefault();
 
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in       
         const user = userCredential.user;
         if (user) {
+          await updateLastLogin(user.uid);
           // Redirect to home page or wherever you want
           navigate('/');
         }
@@ -43,14 +45,14 @@ export default function Loginpage() {
   const handleLoginWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        await updateLastLogin(user.uid);
         navigate('/home/userLogin');
       }).catch((error) => {
         // Handle Errors here.
@@ -62,6 +64,18 @@ export default function Loginpage() {
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
+  };
+
+  const updateLastLogin = async (uid) => {
+    try {
+      await updateDoc(doc(db, 'users', uid), {
+        last_login: new Date()
+      });
+      console.log("Last login updated successfully");
+    } catch (error) {
+      console.error("Error updating last login: ", error);
+      // Handle error
+    }
   };
 
   return (
