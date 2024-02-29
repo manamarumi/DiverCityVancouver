@@ -1,92 +1,72 @@
-import React from 'react';
-import AdminNavber from "../../components/adminNavber.jsx";
-import { Button } from "../../components/ui/button.jsx";
-import { Input } from "../../components/ui/input.jsx";
-import { Textarea } from "../../components/ui/textarea.jsx";
-import { Switch } from "../../components/ui/switch.jsx";
-import { Label } from "../../components/ui/label.jsx";
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase';
+import AdminNavber from "../../components/adminNavber.jsx";
 
-export default function Postevents() {
+export default function Editevents() {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    fetchEventsFromFirestore();
+  }, []);
+
+  const fetchEventsFromFirestore = async () => {
+    try {
+      const eventsSnapshot = await getDocs(collection(db, 'event'));
+      const eventsData = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setEvents(eventsData);
+    } catch (error) {
+      console.error('Error fetching events: ', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <AdminNavber />
-      <main className="flex-1 p-5">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-semibold">Edit Event</h2>
-          <Link to={'/'}>
-            <Button className="bg-bluee rounded-lg shadow-lg h-13">             
-              <div className="flex items-center justify-center">
-                <Signout />
-                <p>Sign Out</p>
+      <main className="flex-1 p-10">
+        <h1 className="text-3xl font-semibold mb-6">Edit Events</h1>
+        <div className="mb-8">
+          <input
+            className="flex h-10 border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full p-4 rounded-md"
+            placeholder="Search Event title or contents"
+            type="text"
+          />
+        </div>
+        <div className="grid grid-cols-3 gap-6">
+          {/* Render Event cards */}
+          {events.map(event => (
+            <div key={event.id} className="border text-card-foreground bg-white p-4 rounded-md shadow" data-v0-t="card">
+              <div className="flex flex-col space-y-1.5 p-6">
+                <h3 className="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{event.title}</h3>
               </div>
-            </Button>
-          </Link>
-        </div>        
-        <div className='p-5 border border-black rounded-lg'>
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col items-center justify-center border-dashed border-2 rounded-lg h-96 mb-6">
-                <PlusIcon />
-                <Button className="mt-2" variant="ghost">
-                  <input type="file" id="upload-photo" name="upload-photo" accept="image/*" />                 
-                </Button>
-              </div>
-              <Input placeholder="Event name, place" />
-              <Textarea placeholder="Details text of the event." />
-              <div className="grid grid-cols-1 grid-cols-4 gap-4">
-                <Input type="datetime-local" className="flex-grow" placeholder="Type in the time of the event." />
-                <Input className="flex-grow" placeholder="Type in the place of the event." />
-                <Input className="flex-grow" placeholder="Type in the cost of the event." />
-                <div className="flex flex-col items-center flex-grow">
-                  <Switch id="event-premium" />
-                  <Label className="ml-2" htmlFor="event-premium">
-                    Is this event premium?
-                  </Label>
-                </div>       
-              </div>
-              <div className="flex items-center justify-center space-x-4">
-                <Button variant="outline" className="mr-10 py-4 px-20" >Preview</Button>
-                <Button variant="outline" className="py-4 px-20">Upload</Button>
+              <div className="p-6">
+                <img
+                  src={event.event_image}
+                  alt={event.title}
+                  className="mb-4"
+                  width="500"
+                  height="300"
+                  style={{ aspectRatio: '500 / 300', objectFit: 'cover' }}
+                />
+                <div className="flex justify-between">
+                  <div>
+                    <p className="text-sm">Starts date: {event.start_datetime.toDate().toLocaleString()}</p>
+                    <p className="text-sm">End date: {event.end_datetime.toDate().toLocaleString()}</p>
+                  </div>
+                  <div>
+                    <Link to={`/postevents/${event.id}`}>
+                      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-4654A3 hover:text-white h-10 px-4 py-2">
+                        Edit
+                      </button>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>              
+          ))}
+        </div>
       </main>
     </div>
-  )
-}
-
-
-function Signout(props) {
-  return (
-    <svg
-      fill="currentColor"
-      viewBox="0 0 16 16"
-      height="24"
-      width="24"
-      {...props}
-    >
-      <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z" />
-      <path d="M10.828.122A.5.5 0 0111 .5V1h.5A1.5 1.5 0 0113 2.5V15h1.5a.5.5 0 010 1h-13a.5.5 0 010-1H3V1.5a.5.5 0 01.43-.495l7-1a.5.5 0 01.398.117zM11.5 2H11v13h1V2.5a.5.5 0 00-.5-.5zM4 1.934V15h6V1.077l-6 .857z" />
-    </svg>
   );
-}
-
-function PlusIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  )
 }
