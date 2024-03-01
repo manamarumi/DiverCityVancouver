@@ -8,6 +8,7 @@ import Postevents from './pages/Admin/postevents';
 import Editevents from './pages/Admin/editevents';
 import Postnews from './pages/Admin/postnews';
 import Editnews from './pages/Admin/editnews';
+import Editnewsdata from './pages/Admin/editnewsdata';
 import Signuppage from './pages/Customer/Signuppage/signuppage';
 import Loginpage from './pages/Customer/Login/Login';
 import MonthlyEventView from './pages/MonthlyEventView/MonthlyEventView';
@@ -53,6 +54,7 @@ function App() {
           <Route path="/admin/editevent" element={<Editevents />} />
           <Route path="/admin/postnews" element={<Postnews />} />
           <Route path="/admin/editnews" element={<Editnews />} />
+          <Route path="/editnews/:id" element={<Editnewsdata/>} />
           <Route path="/news/explore/news" element={<ExploreNews/>} />
           <Route path="/events/explore/:id" element={<ExploreEvent/>} />
         </Routes>
