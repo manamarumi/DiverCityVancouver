@@ -76,7 +76,7 @@ export default function Editnews() {
                   style={{ aspectRatio: '16 / 9', objectFit: 'cover' }}
                 />
                 <div className="flex justify-between items-center">
-                  <Link to={`/editnews/${newsItem.id}`}>
+                  <Link to={`/admin/editnews/${newsItem.id}`}>
                     <Button className="inline-flex items-center justify-center bg-bluee text-white rounded-md text-sm font-medium px-3 py-1 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-blue-600">
                       Edit
                     </Button>

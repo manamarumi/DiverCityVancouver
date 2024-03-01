@@ -111,7 +111,10 @@ export default function EditNewsData() {
             {deleteSuccess && <p className="text-red-500 text-2xl">News deleted successfully</p>}
             <div className="relative flex flex-col items-center justify-center border-dashed border-2 rounded-lg h-96 mb-6">
               {selectedImage ? (
-                <img src={selectedImage} alt="Uploaded News" className="h-full w-full object-fit rounded-lg" />
+                <>
+                  <img src={selectedImage} alt="Uploaded News" className="h-full w-full object-fit rounded-lg" />
+                  <button onClick={handleImageRemove} className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-lg">Remove</button>
+                </>
               ) : (
                 <>
                   <label htmlFor="upload-photo" className="cursor-pointer flex flex-col items-center justify-center">
