@@ -6,8 +6,10 @@ import Admin from './pages/Admin/admin';
 import Adminpage from './pages/Admin/adminpage';
 import Postevents from './pages/Admin/postevents';
 import Editevents from './pages/Admin/editevents';
+import Editeventsdata from './pages/Admin/editeventsdata';
 import Postnews from './pages/Admin/postnews';
 import Editnews from './pages/Admin/editnews';
+import Editnewsdata from './pages/Admin/editnewsdata';
 import Signuppage from './pages/Customer/Signuppage/signuppage';
 import Loginpage from './pages/Customer/Login/Login';
 import MonthlyEventView from './pages/MonthlyEventView/MonthlyEventView';
@@ -51,8 +53,10 @@ function App() {
           <Route path="/admin/userdetails/:username" element={<UserDetails />} />
           <Route path="/admin/postevent" element={<Postevents />} />
           <Route path="/admin/editevent" element={<Editevents />} />
+          <Route path="/admin/editevent/:id" element={<Editeventsdata />} />
           <Route path="/admin/postnews" element={<Postnews />} />
           <Route path="/admin/editnews" element={<Editnews />} />
+          <Route path="/admin/editnews/:id" element={<Editnewsdata/>} />
           <Route path="/news/explore/news" element={<ExploreNews/>} />
           <Route path="/events/explore/:id" element={<ExploreEvent/>} />
         </Routes>
