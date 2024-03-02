@@ -130,7 +130,7 @@ export default function MonthlyEventView() {
               </Card>
             );
           })}
-          <Card className="w-full">
+          {/* <Card className="w-full">
             <div className="flex">
               <CardHeader>
                 <img
@@ -179,7 +179,7 @@ export default function MonthlyEventView() {
                 </div>
               </CardContent>
             </div>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </div>

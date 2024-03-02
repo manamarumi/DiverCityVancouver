@@ -12,7 +12,11 @@ export default function Calendar() {
       <Navbar/>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-4xl font-bold text-center mb-10">Monthly Event Calendar</h1>
+
+
         <div className="grid grid-cols-4 gap-6">
+
+          
           <Link to={'/events/January'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
@@ -31,6 +35,9 @@ export default function Calendar() {
             </div>
           </a>
           </Link>
+
+
+          <Link to={'/events/February'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="February Event"
@@ -47,6 +54,9 @@ export default function Calendar() {
               <p className="text-lg font-semibold">February</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/March'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="March Event"
@@ -58,11 +68,14 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">March</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/April'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="April Event"
@@ -74,11 +87,14 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">April</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/May'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="May Event"
@@ -90,11 +106,16 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">May</p>
             </div>
           </a>
+          </Link>
+
+
+          <Link to={'/events/June'}>
+
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="June Event"
@@ -106,11 +127,15 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">June</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/July'}>
+
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="July Event"
@@ -122,11 +147,14 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">July</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/August'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="August Event"
@@ -138,11 +166,14 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">August</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/September'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="September Event"
@@ -154,11 +185,14 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">September</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/October'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="October Event"
@@ -170,11 +204,14 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">October</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/November'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="November Event"
@@ -186,11 +223,14 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">November</p>
             </div>
           </a>
+          </Link>
+
+          <Link to={'/events/December'}>
           <a className="block rounded-lg shadow-lg bg-white overflow-hidden" href="#">
             <img
               alt="December Event"
@@ -202,11 +242,12 @@ export default function Calendar() {
                 objectFit: "cover",
               }}
               width="300"
-            />
+              />
             <div className="p-4 text-center">
               <p className="text-lg font-semibold">December</p>
             </div>
           </a>
+          </Link>
         </div>
       </div>
       </div>
