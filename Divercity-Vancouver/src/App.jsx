@@ -17,6 +17,10 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import ExploreEvent from './pages/ExploreEvent/ExploreEvent';
 import ExploreNews from './pages/ExploreNews/ExploreNews';
 import Profile from './pages/Customer/Profile/profile';
+import UserProfile from './pages/UserProfile/UserProfile';
+import EditUserProfile from './pages/EditUserProfile/EditUserProfile';
+import ChangePassword from './pages/ChangePassword/ChangePassword';
+import Subscription from './pages/Subscription/Subscription';
 
 function App() {
 
@@ -55,6 +59,10 @@ function App() {
           <Route path="/admin/editnews" element={<Editnews />} />
           <Route path="/news/explore/news" element={<ExploreNews/>} />
           <Route path="/events/explore/:id" element={<ExploreEvent/>} />
+          <Route path="/userprofile" element={<UserProfile/>} />
+          <Route path="/edituserprofile" element={<EditUserProfile/>} />
+          <Route path="/changepassword" element={<ChangePassword/>} />
+          <Route path="/subscription" element={<Subscription/>} />
         </Routes>
       </Router>
     </div>
