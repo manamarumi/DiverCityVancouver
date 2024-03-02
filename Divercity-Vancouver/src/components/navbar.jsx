@@ -110,7 +110,7 @@ export default function Navbar() {
         </NavLink>
 
 
-        {/* <NavLink to={}> */}
+        <NavLink to={'/'}>
           <Button onClick={handleSignOut} className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/' ? 'bg-primary' : ''}`}>
             <div>
               <div className="flex items-center justify-center">
@@ -119,7 +119,7 @@ export default function Navbar() {
               <p className="text-white">Sign out</p>
             </div>
           </Button>
-        {/* </NavLink> d */}
+        </NavLink>
 
     </>
   )
