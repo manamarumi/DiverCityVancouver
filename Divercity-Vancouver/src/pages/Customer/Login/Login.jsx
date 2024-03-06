@@ -107,7 +107,7 @@ export default function Loginpage() {
               </Button>
             </form>
             <div className="text-center mt-4">
-              <p className="text-sm text-gray-600">other way to login:</p>
+              <p className="text-sm text-gray-600">Other Ways to Login:</p>
             </div>
             <div className="flex items-center justify-between w-full">
               <Button onClick={handleLoginWithGoogle} className="border border-gray-400 text-gray-800 font-semibold py-2 rounded-xl flex items-center" style={{ backgroundColor: 'white', color: '#4654A3' }}>
@@ -121,6 +121,11 @@ export default function Loginpage() {
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600">
                 Don't have an account? <Link to="/signup" className="text-blue-600">Sign up now</Link>
+              </p>
+            </div>
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600">
+                Forgot Password? <Link to="/forgotpassword" className="text-blue-600">Click here</Link>
               </p>
             </div>
           </div>

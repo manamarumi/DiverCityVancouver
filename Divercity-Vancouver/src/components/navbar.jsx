@@ -111,7 +111,7 @@ export default function Navbar() {
 
 
         <NavLink to={'/'}>
-          <Button onClick={handleSignOut} className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/' ? 'bg-primary' : ''}`}>
+          <Button onClick={handleSignOut} className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/' ? '' : ''}`}>
             <div>
               <div className="flex items-center justify-center">
                 <Signout />
