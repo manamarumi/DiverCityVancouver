@@ -99,7 +99,7 @@ export default function Navbar() {
 
 
       <NavLink to={'/userprofile'}>
-          <Button className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/userprofile' ? 'bg-primary' : ''}`}>
+          <Button className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${location.pathname === '/userprofile' ? 'bg-primary' : ''}`}>
             <div>
               <div className="flex items-center justify-center">
                 <UserIcon />
@@ -111,7 +111,7 @@ export default function Navbar() {
 
 
         <NavLink to={'/'}>
-          <Button onClick={handleSignOut} className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/' ? '' : ''}`}>
+          <Button onClick={handleSignOut} className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${location.pathname === '/' ? '' : ''}`}>
             <div>
               <div className="flex items-center justify-center">
                 <Signout />
