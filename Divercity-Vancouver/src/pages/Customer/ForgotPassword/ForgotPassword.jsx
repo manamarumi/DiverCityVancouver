@@ -11,7 +11,7 @@ export default function ChangePassword() {
       <div className="min-h-screen flex bg-gray-100">
 
 
-        <div className="flex flex-col w-full px-4 bg-gray-100 rounded-lg">
+        <div className="flex mt-5 flex-col w-full px-4 bg-gray-100 rounded-lg">
           <div className="mb-6">
             <h1 className="text-xl font-semibold">Forgot Password</h1>
           </div>

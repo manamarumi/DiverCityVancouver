@@ -1,10 +1,61 @@
 import { Button } from "@/components/ui/button";
 import Navbar from "../../components/navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useState } from 'react';
+import { getAuth, signInWithEmailAndPassword, updatePassword } from 'firebase/auth';
+import { app } from '../../firebase';
 
-export default function ChangePassword() {
+
+export default function ChangePassword() {  
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const navigate = useNavigate(); 
+
+  const handleChangePassword = async () => {
+
+    const updateCurrentUser = async ({ password }) => {
+      try {
+        const auth = getAuth(app);
+        const user = auth.currentUser;
+  
+        await updatePassword(user, password);  
+        setSuccess("Your password has been updated successfully.");
+        setTimeout(() => {
+          navigate("/userprofile");
+        }, 1000);     
+      } catch (error) {
+        throw error;
+      }
+    };
+    
+    try {      
+      if (newPassword !== confirmPassword) {
+        throw new Error("Password do not match.");
+      }
+     
+      const auth = getAuth(app);
+      const user = auth.currentUser;
+   
+      try {
+        await signInWithEmailAndPassword(auth, user.email, currentPassword);
+      } catch (error) {
+       if (error.code === 'auth/invalid-credential') {
+          throw new Error("Invalid current password.");
+        } else {
+          throw error;
+        }
+      }      
+      await updateCurrentUser({ password: newPassword });     
+    } catch (error) {     
+      setError(error.message);
+    }
+  };
+
+
   return (
     <div>
       <Navbar />
@@ -40,7 +91,7 @@ export default function ChangePassword() {
 
         <div className="flex flex-col w-full px-4 bg-gray-100 rounded-lg">
           <div className="mb-6">
-            <h1 className="text-xl font-semibold">Change Password</h1>
+            <h1 className="text-xl mt-5 font-semibold">Change Password</h1>
           </div>
           <div className="flex flex-col space-y-4">
             <label
@@ -52,12 +103,20 @@ export default function ChangePassword() {
             <Input
               id="current-password"
               placeholder=""
-              type="password"
+              type="password"   
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}          
             />
             <label className="block text-sm font-medium" htmlFor="new-password">
               New Password
             </label>
-            <Input id="new-password" placeholder="" type="password" />
+            <Input 
+              id="new-password" 
+              placeholder="" 
+              type="password"  
+              value={newPassword} 
+              onChange={(e) => setNewPassword(e.target.value)}            
+            />
             <label
               className="block text-sm font-medium"
               htmlFor="confirm-password"
@@ -67,13 +126,17 @@ export default function ChangePassword() {
             <Input
               id="confirm-password"
               placeholder=""
-              type="password"
+              type="password" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)}            
             />
           </div>
           <div className="flex justify-center space-x-2 mt-6">
-            <Button variant="outline">Cancel</Button>
-            <Button variant="outline"> OK</Button>
-          </div>
+            <Link to={"/userprofile"}><Button variant="outline">Cancel</Button></Link>
+            <Button onClick={handleChangePassword}> OK</Button>
+          </div>  
+          {error && <p className="text-red-500 mt-2">{error}</p>}     
+          {success && <p className="text-green-500 mt-2">{success}</p>}     
         </div>
       </div>
     </div>
