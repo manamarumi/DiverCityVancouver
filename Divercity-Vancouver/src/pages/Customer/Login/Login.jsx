@@ -53,7 +53,7 @@ export default function Loginpage() {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         await updateLastLogin(user.uid);
-        navigate('/home/userLogin');
+        navigate('/login');
       }).catch((error) => {
         // Handle Errors here.
         const errorMessage = error.message;
