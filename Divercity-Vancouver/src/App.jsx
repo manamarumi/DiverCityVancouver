@@ -49,7 +49,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Loginpage />} />
-          <Route path="/signup" element={<Signuppage />} />
+          <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signuppage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/events" element={<MonthlyEventView />} />
           <Route path="/events/:month" element={<MonthlyEventView />} />
