@@ -76,7 +76,6 @@ export default function Navbar() {
       </div>
 
       {
-<<<<<<< Updated upstream
   !userId ? (
     <div className="flex items-center space-x-4 ml-5">
       <Link to={'/signup'}>
@@ -88,18 +87,6 @@ export default function Navbar() {
     </div>
   ) : (
     <>
-=======
-        !userId ? <div className="flex items-center space-x-4 ml-5">
-        <Link to={'/signup'}>
-          <Button className="bg-bluee w-24 h-10 px-2 text-l text-white rounded-lg shadow-lg">Sign Up</Button>
-        </Link>
-        <Link to={'/login'}>
-          <Button className="bg-bluee text-l text-white rounded-lg shadow-lg">Login</Button>
-        </Link>
-      </div> : 
-        <Button onClick={handleSignOut}>Sign out</Button>
-        
->>>>>>> Stashed changes
 
 
       {/* <Link
