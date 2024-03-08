@@ -60,7 +60,7 @@ export default function Adminpage() {
                 <div className="flex items-center justify-center">
                   <Signout />
                 </div>
-                <p>Sign Out</p>
+                <p>Homepage</p>
               </div>
             </Button>
           </Link>
