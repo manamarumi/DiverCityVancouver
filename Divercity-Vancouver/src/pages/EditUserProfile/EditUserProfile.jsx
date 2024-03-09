@@ -98,7 +98,7 @@ export default function EditUserProfile() {
                 <Input value={userProfile?.name} onChange={(e) => setUserProfile({
                   ...userProfile,
                   name: e.target.value
-                })} defaultValue="" placeholder="First Name" />
+                })} defaultValue="" placeholder="Name" />
 
                 <Input
                   value={userProfile?.email} onChange={(e) => setUserProfile({
@@ -119,6 +119,27 @@ export default function EditUserProfile() {
                   placeholder="Phone Number"
                   type="number"
                 />
+
+                <Input
+                  value={userProfile?.address} onChange={(e) => setUserProfile({
+                    ...userProfile,
+                    address: e.target.value
+                  })}
+                  defaultValue=""
+                  placeholder="Address"
+                  type="address"
+                />
+
+                  <Input
+                  value={userProfile?.postalCode} onChange={(e) => setUserProfile({
+                    ...userProfile,
+                    postalCode: e.target.value
+                  })}
+                  defaultValue=""
+                  placeholder="Postal Code"
+                  type="postalCode"
+                />
+
               </div>
               <div className="flex justify-between mt-6">
                 <Button className="w-1/3" variant="outline">
@@ -126,6 +147,7 @@ export default function EditUserProfile() {
                 </Button>
                 <Button className="w-1/3" onClick={updateProfile}>Update</Button>
               </div>
+              
             </div>
           </div>
         </div>
@@ -154,49 +176,9 @@ function CameraIcon(props) {
   );
 }
 
-function LogInIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-      <polyline points="10 17 15 12 10 7" />
-      <line x1="15" x2="3" y1="12" y2="12" />
-    </svg>
-  );
-}
 
 
-function PersonStandingIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="5" r="1" />
-      <path d="m9 20 3-6 3 6" />
-      <path d="m6 8 6 2 6-2" />
-      <path d="M12 10v4" />
-    </svg>
-  );
-}
+
 
 function PlusIcon(props) {
   return (
@@ -218,26 +200,6 @@ function PlusIcon(props) {
   );
 }
 
-function SubscriptIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m4 5 8 8" />
-      <path d="m12 5-8 8" />
-      <path d="M20 19h-4c0-1.5.44-2 1.5-2.5S20 15.33 20 14c0-.47-.17-.93-.48-1.29a2.11 2.11 0 0 0-2.62-.44c-.42.24-.74.62-.9 1.07" />
-    </svg>
-  );
-}
 
 function LockIcon(props) {
   return (
@@ -259,26 +221,7 @@ function LockIcon(props) {
   );
 }
 
-function LogOutIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-      <polyline points="16 17 21 12 16 7" />
-      <line x1="21" x2="9" y1="12" y2="12" />
-    </svg>
-  );
-}
+
 
 function MailboxIcon(props) {
   return (
