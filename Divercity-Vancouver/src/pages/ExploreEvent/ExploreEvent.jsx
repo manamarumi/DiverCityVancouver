@@ -50,21 +50,31 @@ export default function ExploreEvent() {
           />
           <h1 className="text-4xl font-bold">{event.title}</h1>
           <p className="mt-4 text-lg">{event.description}</p>
-          <div className="flex flex-wrap items-center gap-4 mt-6">
+          <div className="flex justify-between items-center mt-6">
+          <div className="flex items-center">
             <ClockIcon className="text-gray-500 h-6 w-6" />
-            <p>{event.start_datetime.toDate().toLocaleString()}</p>
+            <p className="ml-2">{event.start_datetime.toDate().toLocaleString()}</p>
+          </div>
+          <div className="flex items-center">
             <MapPinIcon className="text-gray-500 h-6 w-6" />
-            <p>{event.location}</p>
+            <p className="ml-2">{event.location}</p>
+          </div>
+          <div className="flex items-center">
             <DollarSignIcon className="text-gray-500 h-6 w-6" />
-            <p>{event.isPremium ? "Paid" : "Free"}</p>
+            <p className="ml-2">{event.isPremium ? "Paid" : "Free"}</p>
+          </div>
+          <div className="flex items-center">
             <button className="p-2">
               <BookmarkIcon className="h-6 w-6" />
             </button>
+          </div>
+          <div className="flex items-center">
             <button className="p-2">
               <HeartIcon className="h-6 w-6" />
             </button>
-            <span>72</span>
+            <span className="ml-1">72</span>
           </div>
+        </div>
         </div>
       </div>
     </div>
