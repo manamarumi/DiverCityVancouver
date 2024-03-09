@@ -5,10 +5,27 @@ import { NavLink, useLocation, Link } from 'react-router-dom';
 import { CalendarIcon, EventIcon, HomeIcon, ProfileIcon, SearchIcon } from "./homepageIcon.jsx";
 import { getAuth, signOut } from "firebase/auth";
 
-export default function Navbar() {
 
+
+export default function Navbar() {
   const location = useLocation();
   const [userId, setUserId] = useState(null);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const monthMap = {
+    1: "January",
+    2: "February",
+    3: "March",
+    4: "April",
+    5: "May",
+    6: "June",
+    7: "July",
+    8: "August",
+    9: "September",
+    10: "October",
+    11: "November",
+    12: "December"
+};
 
   useEffect(() => {
     const userId = localStorage.getItem('userid');
@@ -55,7 +72,7 @@ export default function Navbar() {
             </div>
           </Button>
         </NavLink>
-        <NavLink to={'/events'}>
+        <NavLink to={`/events/${monthMap[currentMonth]}`}>
           <Button className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/events' ? 'bg-primary' : ''}`}>
             <div>
               <div className="flex items-center justify-center">
