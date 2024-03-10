@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/navbar";
-import { collection, doc, getDoc, updateDoc, increment } from "firebase/firestore";
+import { doc, getDoc, updateDoc, increment, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export default function ExploreEvent() {
@@ -9,6 +9,7 @@ export default function ExploreEvent() {
   const [event, setEvent] = useState(null);
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     const getEvent = async () => {
@@ -18,6 +19,17 @@ export default function ExploreEvent() {
         const eventData = eventDoc.data();
         setEvent({ id: eventDoc.id, ...eventData });
         setLikes(eventData.likes || 0);
+        // Check if event is bookmarked by the current user
+        // Assuming user ID is stored in localStorage
+        const userId = JSON.parse(localStorage.getItem('userid'));
+        if (userId) {
+          const userDocRef = doc(db, "users", userId);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setIsBookmarked(userData.bookmarkedEvents.includes(id));
+          }
+        }
       } else {
         // Handle event not found
         console.log("Event not found");
@@ -34,6 +46,21 @@ export default function ExploreEvent() {
       likes: isLiked ? increment(-1) : increment(1)
     });
     setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
+  };
+
+  const handleBookmark = async () => {
+    setIsBookmarked(!isBookmarked);
+    const userId = JSON.parse(localStorage.getItem('userid'));
+    const userRef = doc(db, "users", userId);
+    if (isBookmarked) {
+      await updateDoc(userRef, {
+        bookmarkedEvents: arrayRemove(id)
+      });
+    } else {
+      await updateDoc(userRef, {
+        bookmarkedEvents: arrayUnion(id)
+      });
+    }
   };
 
   if (!event) {
@@ -83,7 +110,9 @@ export default function ExploreEvent() {
               <span className="ml-1">{likes}</span>
             </div>
             <div className="flex items-center">
-              <BookmarkIcon className="text-gray-500 h-6 w-6" />
+              <button className="p-2" onClick={handleBookmark}>
+                <BookmarkIcon className={`h-6 w-6 ${isBookmarked ? 'text-yellow-500' : 'text-gray-500'}`} />
+              </button>
             </div>
           </div>
         </div>
