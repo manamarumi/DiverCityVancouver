@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/navbar";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, updateDoc, increment } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export default function ExploreEvent() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
+  const [likes, setLikes] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     const getEvent = async () => {
       const eventRef = doc(db, "event", id);
       const eventDoc = await getDoc(eventRef);
       if (eventDoc.exists()) {
-        setEvent({ id: eventDoc.id, ...eventDoc.data() });
+        const eventData = eventDoc.data();
+        setEvent({ id: eventDoc.id, ...eventData });
+        setLikes(eventData.likes || 0);
       } else {
         // Handle event not found
         console.log("Event not found");
@@ -22,6 +26,15 @@ export default function ExploreEvent() {
 
     getEvent();
   }, [id]);
+
+  const handleLike = async () => {
+    setIsLiked(!isLiked);
+    const eventRef = doc(db, "event", id);
+    await updateDoc(eventRef, {
+      likes: isLiked ? increment(-1) : increment(1)
+    });
+    setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
+  };
 
   if (!event) {
     return <div>Loading...</div>; // You can display a loader while fetching the event
@@ -51,36 +64,33 @@ export default function ExploreEvent() {
           <h1 className="text-4xl font-bold">{event.title}</h1>
           <p className="mt-4 text-lg">{event.description}</p>
           <div className="flex justify-between items-center mt-6">
-          <div className="flex items-center">
-            <ClockIcon className="text-gray-500 h-6 w-6" />
-            <p className="ml-2">{event.start_datetime.toDate().toLocaleString()}</p>
+            <div className="flex items-center">
+              <ClockIcon className="text-gray-500 h-6 w-6" />
+              <p className="ml-2">{event.start_datetime.toDate().toLocaleString()}</p>
+            </div>
+            <div className="flex items-center">
+              <MapPinIcon className="text-gray-500 h-6 w-6" />
+              <p className="ml-2">{event.location}</p>
+            </div>
+            <div className="flex items-center">
+              <DollarSignIcon className="text-gray-500 h-6 w-6" />
+              <p className="ml-2">{event.isPremium ? "Paid" : "Free"}</p>
+            </div>
+            <div className="flex items-center">
+              <button className="p-2" onClick={handleLike}>
+                <HeartIcon className={`h-6 w-6 ${isLiked ? 'text-red-500' : 'text-gray-500'}`} />
+              </button>
+              <span className="ml-1">{likes}</span>
+            </div>
+            <div className="flex items-center">
+              <BookmarkIcon className="text-gray-500 h-6 w-6" />
+            </div>
           </div>
-          <div className="flex items-center">
-            <MapPinIcon className="text-gray-500 h-6 w-6" />
-            <p className="ml-2">{event.location}</p>
-          </div>
-          <div className="flex items-center">
-            <DollarSignIcon className="text-gray-500 h-6 w-6" />
-            <p className="ml-2">{event.isPremium ? "Paid" : "Free"}</p>
-          </div>
-          <div className="flex items-center">
-            <button className="p-2">
-              <BookmarkIcon className="h-6 w-6" />
-            </button>
-          </div>
-          <div className="flex items-center">
-            <button className="p-2">
-              <HeartIcon className="h-6 w-6" />
-            </button>
-            <span className="ml-1">72</span>
-          </div>
-        </div>
         </div>
       </div>
     </div>
   );
 }
-
 
 
 function BookmarkIcon(props) {
