@@ -1,12 +1,47 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { doc, getDoc, arrayRemove, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import { AvatarImage, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "../../components/navbar";
-//import EditUserProfile from './EditUserProfile/EditUserProfile';
 
+// Define UserProfile component
 export default function UserProfile() {
+  // State to hold the list of bookmarked events
+  const [bookmarkedEvents, setBookmarkedEvents] = useState([]);
+
+  // Fetch bookmarked events from Firestore on component mount
+  useEffect(() => {
+    // Function to fetch bookmarked events for the current user
+    const fetchBookmarkedEvents = async () => {
+      const userId = JSON.parse(localStorage.getItem('userid'));
+      const userRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setBookmarkedEvents(userData.bookmarkedEvents || []);
+      }
+    };
+
+    // Call fetch function
+    fetchBookmarkedEvents();
+  }, []);
+
+  // Function to handle unbookmarking an event
+  const handleUnbookmark = async (eventId) => {
+    const userId = JSON.parse(localStorage.getItem('userid'));
+    const userRef = doc(db, "users", userId);
+    // Remove event ID from bookmarkedEvents array
+    await updateDoc(userRef, {
+      bookmarkedEvents: arrayRemove(eventId)
+    });
+    // Update bookmarkedEvents state
+    setBookmarkedEvents(bookmarkedEvents.filter(id => id !== eventId));
+  };
+
   return (
     <div>
       <Navbar />
@@ -14,28 +49,18 @@ export default function UserProfile() {
         <nav className="w-64 px-8 py-4 bg-white border-r">
           <div className="flex flex-col space-y-8">
             <div className="space-y-2">
-              <Link to={"/userprofile"}
-                className="flex items-center space-x-2 text-gray-700 hover:text-black-900"
-                href="#"
-              >
+              <Link to={"/userprofile"} className="flex items-center space-x-2 text-gray-700 hover:text-black-900" href="#">
                 <UserIcon className="text-gray-400" />
                 <span>Profile</span>
               </Link>
-
-              <Link to={"/subscription"}
-                className="flex items-center space-x-2 text-gray-700 hover:text-black-900"
-                href="#">
+              <Link to={"/subscription"} className="flex items-center space-x-2 text-gray-700 hover:text-black-900" href="#">
                 <MailboxIcon className="text-gray-400" />
                 <span>Subscription</span>
               </Link>
-
-              <Link to={"/changepassword"}
-                className="flex items-center space-x-2 text-gray-700 hover:text-black-900"
-                href="#">
+              <Link to={"/changepassword"} className="flex items-center space-x-2 text-gray-700 hover:text-black-900" href="#">
                 <LockIcon className="text-gray-400" />
                 <span>Password</span>
               </Link>
-
             </div>
           </div>
         </nav>
@@ -46,29 +71,18 @@ export default function UserProfile() {
                 <CardTitle>Your Name</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex space-x-4">
+                <div className="flex space-x-4 items-center">
                   <Avatar>
-                    <AvatarImage
-                      alt="Profile picture"
-                      src="/placeholder.svg?height=64&width=64"
-                    />
+                    <AvatarImage alt="Profile picture" src="/placeholder.svg?height=64&width=64" />
                   </Avatar>
-                  <div className="flex flex-col justify-between">
+                  <div className="flex flex-col">
                     <div>
                       <h3 className="text-lg font-semibold">User Name</h3>
                       <p className="text-sm text-gray-600">
-                        Here goes the bio/description. Lorem ipsum dolor sit
-                        amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris
-                        nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                        dolor in reprehenderit in voluptate velit esse cillum
-                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                        cupidatat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum.
+                        Here goes the bio/description. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                       </p>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center mt-4 space-x-4">
                       <Link to={"/edituserprofile"}>
                         <Button className="bg-blue-500 text-white">
                           Edit Profile
@@ -83,54 +97,10 @@ export default function UserProfile() {
             <div>
               <h2 className="text-xl font-semibold mb-4">Bookmarked Events</h2>
               <div className="grid grid-cols-3 gap-4">
-                <Card className="w-full">
-                  <CardContent>
-                    <h3 className="text-lg font-semibold">Event Name</h3>
-                    <p className="text-sm text-gray-600">
-                      Time : January 1, 2024
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Location : Event Location
-                    </p>
-                    <div className="mt-4">
-                      <Link className="text-blue-500 hover:underline" href="#">
-                        View
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="w-full">
-                  <CardContent>
-                    <h3 className="text-lg font-semibold">Event Name</h3>
-                    <p className="text-sm text-gray-600">
-                      Time : January 4, 2024
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Location : Event Location
-                    </p>
-                    <div className="mt-4">
-                      <Link className="text-blue-500 hover:underline" href="#">
-                        View
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="w-full">
-                  <CardContent>
-                    <h3 className="text-lg font-semibold">Event Name</h3>
-                    <p className="text-sm text-gray-600">
-                      Time : January 7, 2024
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Location : Event Location
-                    </p>
-                    <div className="mt-4">
-                      <Link className="text-blue-500 hover:underline" href="#">
-                        View
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
+                {/* Map over bookmarkedEvents and display each event */}
+                {bookmarkedEvents.map(eventId => (
+                  <EventCard key={eventId} eventId={eventId} handleUnbookmark={handleUnbookmark} />
+                ))}
               </div>
             </div>
           </div>
@@ -140,6 +110,56 @@ export default function UserProfile() {
   );
 }
 
+// EventCard component to display individual bookmarked event
+function EventCard({ eventId, handleUnbookmark }) {
+  const [event, setEvent] = useState(null);
+
+  useEffect(() => {
+    const getEvent = async () => {
+      const eventRef = doc(db, "event", eventId);
+      const eventDoc = await getDoc(eventRef);
+      if (eventDoc.exists()) {
+        const eventData = eventDoc.data();
+        setEvent({ id: eventDoc.id, ...eventData });
+      }
+    };
+
+    getEvent();
+  }, [eventId]);
+
+  if (!event) {
+    return null; // You can render a loading indicator here
+  }
+
+  // Function to format date range
+  const formatDateRange = (startDateTime, endDateTime) => {
+    const startDate = startDateTime.toDate().toLocaleDateString();
+    const endDate = endDateTime.toDate().toLocaleDateString();
+    return `${startDate} - ${endDate}`;
+  };
+
+  return (
+    <Card className="mt-4">
+      <CardContent>
+        <h3 className="text-lg font-semibold mt-2">{event.title}</h3>
+        <img
+          alt={event.title}
+          src={event.event_image}
+          className="w-full h-40 object-cover rounded"
+        />
+        <p className="text-sm text-gray-700">Date: {formatDateRange(event.start_datetime, event.end_datetime)}</p>
+        <p className="text-sm text-gray-700">Location: {event.location}</p>
+        <div className="flex justify-between items-center mt-4">
+          <Link to={`/events/explore/event/${eventId}`} className="text-blue-500 hover:underline">View</Link>
+          <button onClick={() => handleUnbookmark(eventId)} className="text-red-500">Unbookmark</button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+
+// Icon components (unchanged)
 function LockIcon(props) {
   return (
     <svg
