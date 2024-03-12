@@ -277,4 +277,5 @@ function MailboxIcon(props) {
       <line x1="6" x2="7" y1="10" y2="10" />
     </svg>
   );
+
 }
