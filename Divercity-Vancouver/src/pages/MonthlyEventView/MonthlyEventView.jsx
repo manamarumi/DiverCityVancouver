@@ -48,6 +48,7 @@ export default function MonthlyEventView() {
         });
         const numericMonth = monthMap[month];
         console.log(numericMonth)
+   
 
         // Filter events by the selected month
         const filteredEvents = eventList.filter(event => {

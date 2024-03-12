@@ -1,12 +1,74 @@
 import Navbar from "../../components/navbar";
 import { Link } from "react-router-dom";
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
-import { AvatarImage, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
+import { useEffect, useState } from "react";
+import { auth } from '../../firebase';
+import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function Subscription() {
+  const [isSubscribed, setIsSubscribed] = useState(false);    
+
+  useEffect(() => {
+    const fetchSubscriptionStatusAndUpdate = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const uid = user.uid;
+
+          const db = getFirestore();
+          const subscriptionsRef = collection(db, "customers", uid, "subscriptions");
+          const q = query(subscriptionsRef, where("status", "in", ["trialing", "active"]));
+          
+          const querySnapshot = await getDocs(q);
+          let subscriptionIsActive = false;
+          
+          querySnapshot.forEach((doc) => {           
+            subscriptionIsActive = true;
+          });
+         
+          const userDocRef = doc(db, 'users', uid);
+          await setDoc(userDocRef, { isSubscribed: subscriptionIsActive }, { merge: true });
+          setIsSubscribed(subscriptionIsActive);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status and updating: ', error);
+      }
+    };
+
+    fetchSubscriptionStatusAndUpdate();
+  }, []);
+
+  
+
+  const handleSubscribe = async () => {    
+    try {      
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const docRef = await addDoc(collection(getFirestore(), 'customers', currentUser.uid, 'checkout_sessions'), {
+          price: 'price_1OtWS9FJKxQEPwUMjPSd0xzD',
+          success_url: window.location.origin,
+          cancel_url: window.location.origin,
+        });
+        // Wait for the CheckoutSession to get attached by the extension
+        onSnapshot(docRef, async (snap) => {
+          const { error, url } = snap.data();
+          if (error) {
+            // Show an error to your customer and
+            // inspect your Cloud Function logs in the Firebase console.
+            alert(`An error occurred: ${error.message}`);
+          }
+          if (url) {
+            // We have a Stripe Checkout URL, let's redirect.
+            window.location.assign(url);            
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error subscribing: ', error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -40,7 +102,7 @@ export default function Subscription() {
           </div>
         </nav>
 
-        <div className=" items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="items-center justify-center min-h-screen bg-gray-100 p-4">
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
             <h1 className="text-3xl font-bold text-center mb-4">
               DiverCity Vanouver
@@ -55,7 +117,7 @@ export default function Subscription() {
             </p>
             <div className="bg-gray-200 p-4 rounded-lg mb-4">
               <h3 className="text-lg text-center font-semibold">
-                You are currently subscribed!
+              {isSubscribed ? "You are currently subscribed!" : "You are not currently subscribed!"}
               </h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -83,7 +145,9 @@ export default function Subscription() {
               <Button className="w-1/2" variant="outline">
                 Change Subscription
               </Button>
-              <Button className="w-1/2">Subscribe Now</Button>
+              <Button className="w-1/2" onClick={handleSubscribe}>
+                Subscribe Now
+              </Button>
             </div>
           </div>
         </div>

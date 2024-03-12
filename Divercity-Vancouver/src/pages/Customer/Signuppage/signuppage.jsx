@@ -29,6 +29,7 @@ const Signuppage = () => {
           date_created: Timestamp.fromDate(new Date()),
           last_login: Timestamp.fromDate(new Date()),
           name: document.getElementById('name').value,
+          isSubscribed: false,
           isAdmin: false,
         };
           
