@@ -4,7 +4,7 @@ import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { auth } from '../../firebase';
-import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, onSnapshot } from 'firebase/firestore';
 
 export default function Subscription() {
   const [isSubscribed, setIsSubscribed] = useState(false);    
