@@ -130,4 +130,3 @@ function Signout(props) {
     </svg>
   );
 }
-
