@@ -4,7 +4,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "../../components/ui/avatar.
 import { CardHeader, CardContent, Card } from "../../components/ui/card.jsx";
 import AdminNavber from "../../components/adminNavber.jsx";
 import { Link, useParams } from 'react-router-dom';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, getDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 export default function UserDetails() {
@@ -15,14 +15,29 @@ export default function UserDetails() {
     const getUser = async () => {
       const q = query(collection(db, "users"), where("name", "==", username));
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setUserData({ id: doc.id, ...doc.data() });
+      querySnapshot.forEach(async (userDoc) => {
+        const userData = userDoc.data();
+        const totalBookmarkedEvents = userData.bookmarkedEvents ? userData.bookmarkedEvents.length : 0;
+        const recentlyBookmarkedEventId = userData.bookmarkedEvents && userData.bookmarkedEvents.length > 0
+          ? userData.bookmarkedEvents[userData.bookmarkedEvents.length - 1]
+          : null;
+
+        if (recentlyBookmarkedEventId) {
+          const eventDocRef = doc(db, "event", recentlyBookmarkedEventId);
+          const eventDocSnap = await getDoc(eventDocRef);
+          if (eventDocSnap.exists()) {
+            const eventData = eventDocSnap.data();
+            const recentlyBookmarkedEventTitle = eventData.title;
+            setUserData({ id: userDoc.id, totalBookmarkedEvents, recentlyBookmarkedEvent: recentlyBookmarkedEventTitle, ...userData });
+          }
+        } else {
+          setUserData({ id: userDoc.id, totalBookmarkedEvents, recentlyBookmarkedEvent: null, ...userData });
+        }
       });
     };
 
     getUser();
   }, [username]);
-
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <AdminNavber />
@@ -33,7 +48,7 @@ export default function UserDetails() {
             <Button className="bg-bluee rounded-lg shadow-lg h-13">
               <div className="flex items-center justify-center">
                 <Signout />
-                <p>Sign Out</p>
+                <p>Homepage</p>
               </div>
             </Button>
           </Link>
@@ -47,8 +62,8 @@ export default function UserDetails() {
           <Card className="bg-white p-6">
             <CardHeader>
               <div className="flex items-center space-x-4">
-                <Avatar>
-                  <AvatarImage alt={userData.name} src={userData.avatarUrl} />
+                <Avatar style={{ width: '100px', height: '100px'}}>
+                  <AvatarImage alt={userData.name} src={userData.image}  />
                   <AvatarFallback>{userData.initials}</AvatarFallback>
                 </Avatar>
               </div>
@@ -77,7 +92,7 @@ export default function UserDetails() {
                 </div>
                 <div>
                   <div className="font-bold">Subscriber</div>
-                  <div>{userData.subscriber ? 'Yes' : 'No'}</div>
+                  <div>{userData.isSubscribed ? 'Yes' : 'No'}</div>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Total Bookmarked Events</h3>

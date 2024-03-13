@@ -72,23 +72,16 @@ export default function EditUserProfile() {
               >
                 <UserIcon className="text-gray-400" />
                 <span>Profile</span>
-              </Link>
-
-              <Link
-                to={"/subscription"}
-                className="flex items-center space-x-2 text-gray-700 hover:text-black-900"
-              >
+              </Link>              
+              <Link to={"/subscription"} className="flex items-center space-x-2 text-gray-700 hover:text-black-900" href="#">
                 <MailboxIcon className="text-gray-400" />
                 <span>Subscription</span>
               </Link>
-
-              <Link
-                to={"/changepassword"}
-                className="flex items-center space-x-2 text-gray-700 hover:text-black-900"
-              >
+              <Link to={"/changepassword"} className="flex items-center space-x-2 text-gray-700 hover:text-black-900" href="#">
                 <LockIcon className="text-gray-400" />
                 <span>Password</span>
               </Link>
+             
             </div>
           </div>
         </nav>
@@ -217,25 +210,6 @@ function UserIcon(props) {
   );
 }
 
-function PlusIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
-}
 
 function LockIcon(props) {
   return (
