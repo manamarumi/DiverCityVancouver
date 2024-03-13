@@ -12,7 +12,8 @@ import Navbar from "../../components/navbar";
 export default function UserProfile() {
   // State to hold the list of bookmarked events
   const [bookmarkedEvents, setBookmarkedEvents] = useState([]);
-
+  const [userData, setUserData] = useState(null);
+  const [isSubscribed, setIsSubscribed] = useState(false);
   // Fetch bookmarked events from Firestore on component mount
   useEffect(() => {
     // Function to fetch bookmarked events for the current user
@@ -23,12 +24,19 @@ export default function UserProfile() {
       if (userDoc.exists()) {
         const userData = userDoc.data();
         setBookmarkedEvents(userData.bookmarkedEvents || []);
+        setUserData(userData);
+        setIsSubscribed(userData.isSubscribed || false);
       }
     };
 
     // Call fetch function
     fetchBookmarkedEvents();
   }, []);
+
+  // Return loading indicator if user data is not yet loaded
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
 
   // Function to handle unbookmarking an event
   const handleUnbookmark = async (eventId) => {
@@ -66,20 +74,20 @@ export default function UserProfile() {
         </nav>
         <div className="flex-1 px-16 py-8">
           <div className="flex flex-col space-y-8">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Your Name</CardTitle>
+            <Card className="w-full">  
+            <CardHeader>
+                <CardTitle>{userData.name}</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent>               
                 <div className="flex space-x-4 items-center">
-                  <Avatar>
-                    <AvatarImage alt="Profile picture" src="/placeholder.svg?height=64&width=64" />
+                  <Avatar className="mt-3" style={{ width: '100px', height: '100px' }}>
+                    <AvatarImage alt="Profile picture" src={userData.image} />
                   </Avatar>
                   <div className="flex flex-col">
                     <div>
-                      <h3 className="text-lg font-semibold">User Name</h3>
-                      <p className="text-sm text-gray-600">
-                        Here goes the bio/description. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                      <h3 className="text-lg font-semibold mt-3">{userData.email}</h3>
+                      <p className="text-sm text-gray-600 mt-3">
+                       {userData.description}
                       </p>
                     </div>
                     <div className="flex items-center mt-4 space-x-4">
@@ -88,7 +96,7 @@ export default function UserProfile() {
                           Edit Profile
                         </Button>
                       </Link>
-                      <Badge variant="secondary">Subscribed</Badge>
+                      <Badge variant="secondary">{isSubscribed ? "Subscribed" : "Unsubscribed"}</Badge>
                     </div>
                   </div>
                 </div>

@@ -102,10 +102,10 @@ export default function MonthlyEventView() {
                     />
                   </CardHeader>
                   <CardContent>
-                    <h2 className="text-xl font-semibold mb-2">
+                    <h2 className="text-xl font-semibold mt-2">
                       {event.title}
                     </h2>
-                    <p className="text-gray-600 mb-4">{event.description}</p>
+                    <p className="text-gray-600 mt-2">{event.description}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <ClockIcon className="h-5 w-5 text-gray-500" />
