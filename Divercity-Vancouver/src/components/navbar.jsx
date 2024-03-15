@@ -1,15 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { Input } from  "./ui/input";
+import React, { useEffect, useState } from "react";
+import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { NavLink, useLocation, Link } from 'react-router-dom';
-import { CalendarIcon, EventIcon, HomeIcon, ProfileIcon, SearchIcon } from "./homepageIcon.jsx";
+import { NavLink, useLocation, Link } from "react-router-dom";
+import {
+  CalendarIcon,
+  EventIcon,
+  HomeIcon,
+  ProfileIcon,
+  SearchIcon,
+} from "./homepageIcon.jsx";
 import { getAuth, signOut } from "firebase/auth";
-
-
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function Navbar() {
   const location = useLocation();
   const [userId, setUserId] = useState(null);
+  const [searchedValue, setSearchedValue] = useState("");
+  const [allEvents, setAllEvents] = useState([]);
+  const [allNews, setAllNews] = useState([]);
+  const [groupedNewsEvents, setGroupedNewsEvents] = useState([]);
+
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const monthMap = {
@@ -24,89 +35,198 @@ export default function Navbar() {
     9: "September",
     10: "October",
     11: "November",
-    12: "December"
-};
+    12: "December",
+  };
 
   useEffect(() => {
-    const userId = localStorage.getItem('userid');
+    const userId = localStorage.getItem("userid");
+    fetchAllNews();
     setUserId(userId);
-  }, [])
-  
+  }, []);
+
+  const fetchAllEvents = async (newsList) => {
+    const eventsRef = collection(db, "event"); // Reference to the 'events' collection
+    const eventSnapshot = await getDocs(eventsRef); // Fetch documents from the collection
+
+    const eventList = []; // Array to hold the events
+
+    eventSnapshot.forEach((doc) => {
+      // Extract data from each document and add it to the eventList array
+      eventList.push({ id: doc.id, ...doc.data() });
+    });
+
+    setAllEvents(eventList);
+
+    mergeNewsAndEvents(newsList, eventList);
+  };
+
+  const fetchAllNews = async () => {
+    const newRef = collection(db, "news"); // Reference to the 'events' collection
+    const eventSnapshot = await getDocs(newRef); // Fetch documents from the collection
+
+    const newsList = []; // Array to hold the events
+
+    eventSnapshot.forEach((doc) => {
+      // Extract data from each document and add it to the newsList array
+      newsList.push({ id: doc.id, ...doc.data() });
+    });
+
+    setAllNews(newsList);
+
+    fetchAllEvents(newsList);
+  };
+
+  const mergeNewsAndEvents = (newsList, eventList) => {
+    const groupedNewsEvents = [
+      {
+        groupLabel: "News",
+        options: newsList,
+      },
+      {
+        groupLabel: "Events",
+        options: eventList,
+      },
+    ];
+
+    setGroupedNewsEvents(groupedNewsEvents);
+  };
+
   const handleSignOut = () => {
     signOut(getAuth())
       .then(() => {
         // Sign-out successful.
-        localStorage.removeItem('userid'); // Remove user ID from local storage
+        localStorage.removeItem("userid"); // Remove user ID from local storage
         setUserId(null); // Update state to reflect sign-out
         window.location.reload();
       })
       .catch((error) => {
         // An error happened.
-        console.error('Sign-out error:', error);
+        console.error("Sign-out error:", error);
       });
   };
-  
 
+  const setSearchOutput = (event) => {
+    setSearchedValue(event.target.value);
 
+    const filteredGroupedList = groupedNewsEvents.map((groupedItem) => {
+      const filteredOptions = groupedItem.options.filter((data) => {
+        if (data.title.includes(searchedValue)) {
+          return true;
+        }
+      })
+
+      groupedItem.options = filteredOptions;
+      return groupedItem;
+    })
+
+    setGroupedNewsEvents(filteredGroupedList);
+
+  }
   return (
     <nav className="bg-bluee py-4">
-    <div className="container mx-auto flex items-center justify-between px-4">
-      <div className="flex items-center space-x-4 justify-center w-full">
-        <NavLink to={'/'}>
-          <Button className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/' ? 'bg-primary' : ''}`}>
-            <div>
-              <div className="flex items-center justify-center">
-                <HomeIcon />
+      <div className="container mx-auto flex items-center justify-between px-4">
+        <div className="flex items-center space-x-4 justify-center w-full">
+          <NavLink to={"/"}>
+            <Button
+              className={`bg-bluee rounded-lg shadow-lg h-13 ${
+                location.pathname === "/" ? "bg-primary" : ""
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-center">
+                  <HomeIcon />
+                </div>
+                <p className="text-white">Home</p>
               </div>
-              <p className="text-white">Home</p>
-            </div>
-          </Button>
-        </NavLink>
-        <NavLink to={'/calendar'}>
-          <Button className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/calendar' ? 'bg-primary' : ''}`}>
-            <div>
-              <div className="flex items-center justify-center">
-                <CalendarIcon />
+            </Button>
+          </NavLink>
+          <NavLink to={"/calendar"}>
+            <Button
+              className={`bg-bluee rounded-lg shadow-lg h-13 ${
+                location.pathname === "/calendar" ? "bg-primary" : ""
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-center">
+                  <CalendarIcon />
+                </div>
+                <p className="text-white">Calendar</p>
               </div>
-              <p className="text-white">Calendar</p>
-            </div>
-          </Button>
-        </NavLink>
-        <NavLink to={`/events/${monthMap[currentMonth]}`}>
-          <Button className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === '/events' ? 'bg-primary' : ''}`}>
-            <div>
-              <div className="flex items-center justify-center">
-                <EventIcon />
+            </Button>
+          </NavLink>
+          <NavLink to={`/events/${monthMap[currentMonth]}`}>
+            <Button
+              className={`bg-bluee rounded-lg shadow-lg h-13 ${
+                location.pathname === "/events" ? "bg-primary" : ""
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-center">
+                  <EventIcon />
+                </div>
+                <p className="text-white">Events</p>
               </div>
-              <p className="text-white">Events</p>
-            </div>
-          </Button>
-        </NavLink>
-        <div className="relative flex-grow">
-          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
-          <Input
-            className="w-full pl-10 pr-4 py-2 border rounded-full bg-white focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search"
-            type="search"
-          />
+            </Button>
+          </NavLink>
+          <div className="relative flex-grow">
+            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+            <Input
+              className="w-full pl-10 pr-4 py-2 border rounded-full bg-white focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Search"
+              type="search"
+              value={searchedValue}
+              onChange={setSearchOutput}
+            />
+
+            {searchedValue.length > 0 && (
+              <div
+                style={{
+                  maxHeight: 400,
+                  width: 500,
+                  backgroundColor: "white",
+                  position: "absolute",
+                  zIndex: 999,
+                  overflow: 'auto'
+                }}
+              >
+                {groupedNewsEvents.length > 0 &&
+                  groupedNewsEvents.map(({ groupLabel, options }, index) => {
+                    const url = groupLabel === 'Events'? 'events/explore/event' : 'news/explore/news';
+                    return (
+                      <div key={index}>
+                        <h1 style={{ background: 'gray'}}>{groupLabel}</h1>
+                        {options.map((data, index2) => {
+                          return <Link to={`${url}/${data.id}`} key={index2} style={{ 
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: 'block'
+                          }}>{data.title}</Link>
+                        })}
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {
-  !userId ? (
-    <div className="flex items-center space-x-4 ml-5">
-      <Link to={'/signup'}>
-        <Button className="bg-bluee w-24 h-10 px-2 text-l text-white rounded-lg shadow-lg">Sign Up</Button>
-      </Link>
-      <Link to={'/login'}>
-        <Button className="bg-bluee text-l text-white rounded-lg shadow-lg">Login</Button>
-      </Link>
-    </div>
-  ) : (
-    <>
-
-
-      {/* <Link
+        {!userId ? (
+          <div className="flex items-center space-x-4 ml-5">
+            <Link to={"/signup"}>
+              <Button className="bg-bluee w-24 h-10 px-2 text-l text-white rounded-lg shadow-lg">
+                Sign Up
+              </Button>
+            </Link>
+            <Link to={"/login"}>
+              <Button className="bg-bluee text-l text-white rounded-lg shadow-lg">
+                Login
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <>
+            {/* <Link
         to={"/userprofile"}
         className="flex items-left space-x-2 text-white-700 hover:text-white-900"
         href="#"
@@ -114,37 +234,41 @@ export default function Navbar() {
         <UserIcon className="text-grey-400" />
       </Link> */}
 
+            <NavLink to={"/userprofile"}>
+              <Button
+                className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${
+                  location.pathname === "/userprofile" ? "bg-primary" : ""
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-center">
+                    <UserIcon />
+                  </div>
+                  <p className="text-white">Profile</p>
+                </div>
+              </Button>
+            </NavLink>
 
-      <NavLink to={'/userprofile'}>
-          <Button className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${location.pathname === '/userprofile' ? 'bg-primary' : ''}`}>
-            <div>
-              <div className="flex items-center justify-center">
-                <UserIcon />
-              </div>
-              <p className="text-white">Profile</p>
-            </div>
-          </Button>
-        </NavLink>
-
-
-        <NavLink to={'/'}>
-          <Button onClick={handleSignOut} className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${location.pathname === '/' ? '' : ''}`}>
-            <div>
-              <div className="flex items-center justify-center">
-                <Signout />
-              </div>
-              <p className="text-white">Sign out</p>
-            </div>
-          </Button>
-        </NavLink>
-
-    </>
-  )
-}
-      
-    </div>
-  </nav>
-  )
+            <NavLink to={"/"}>
+              <Button
+                onClick={handleSignOut}
+                className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${
+                  location.pathname === "/" ? "" : ""
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-center">
+                    <Signout />
+                  </div>
+                  <p className="text-white">Sign out</p>
+                </div>
+              </Button>
+            </NavLink>
+          </>
+        )}
+      </div>
+    </nav>
+  );
 }
 
 function UserIcon(props) {
