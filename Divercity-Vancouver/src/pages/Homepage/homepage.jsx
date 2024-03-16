@@ -5,7 +5,6 @@ import { NavLink, useLocation, Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 import { Button } from '../../components/ui/button';
 import { CardContent, Card } from "../../components/ui/card"
-import { HeartIcon } from "../../components/homepageIcon";
 import { getFirestore, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 export default function Homepage() {
@@ -14,6 +13,7 @@ export default function Homepage() {
   const [trendingNews, setTrendingNews] = useState([]);
   const [likedEvents, setLikedEvents] = useState([]);
 
+
   useEffect(() => {
     const userId = localStorage.getItem('userid');
     setUserId(userId);
@@ -21,13 +21,13 @@ export default function Homepage() {
     const fetchData = async () => {
       try {
         const firestore = getFirestore();
-        
+
         const trendingNewsQuery = query(collection(firestore, 'news'), limit(3));  // Once likes is added add this ← in front of limit3 orderBy('likes', 'desc'),
         const trendingNewsSnapshot = await getDocs(trendingNewsQuery);
         const trendingNewsData = trendingNewsSnapshot.docs.map(doc => doc.data());
         setTrendingNews(trendingNewsData);
-        
-        const likedEventsQuery = query(collection(firestore, 'event'),limit(3)); // Once likes is added add this ← in front of limit3 orderBy('likes', 'desc'),
+
+        const likedEventsQuery = query(collection(firestore, 'event'), limit(3)); // Once likes is added add this ← in front of limit3 orderBy('likes', 'desc'),
         const likedEventsSnapshot = await getDocs(likedEventsQuery);
         const likedEventsData = likedEventsSnapshot.docs.map(doc => doc.data());
         setLikedEvents(likedEventsData);
@@ -36,8 +36,16 @@ export default function Homepage() {
       }
     };
 
-    fetchData();    
+    fetchData();
   }, [])
+  const handleLike = async () => {
+    setIsLiked(!isLiked);
+    const eventRef = doc(db, "event", id);
+    await updateDoc(eventRef, {
+      likes: isLiked ? increment(-1) : increment(1)
+    });
+    setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
+  };
 
 
   return (
@@ -65,40 +73,17 @@ export default function Homepage() {
                     Explore DiverCity!
                   </Button>
                 </Link>
-            }            
+            }
           </div>
         </div>
       </div>
       {userId && (
-            <>
-               <main className="p-4">
+        <>
+          <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Trending News</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {trendingNews.map((news, index) => (
-                <Card key={index} className="w-full">
-                  <img
-                    alt={`News ${index + 1}`}
-                    className="w-full rounded-t-lg"
-                    height="200"
-                    src={news.news_image}
-                    style={{
-                      aspectRatio: "300/200",
-                      objectFit: "cover",
-                    }}
-                    width="300"
-                  />
-                  <CardContent>
-                    <h3 className="font-bold">{news.title}</h3>
-                    <p className="text-gray-600">{news.description}</p>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center">
-                        <HeartIcon className="h-6 w-6 text-pink-500" />
-                        <span className="ml-1">{news.likes}</span>
-                      </div>
-                      <Button variant="ghost">Read more</Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <TrendingNews news={news} index={index} />
               ))}
             </div>
           </main>
@@ -106,35 +91,120 @@ export default function Homepage() {
             <h2 className="text-3xl font-bold text-center mb-6">Most Liked Events</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {likedEvents.map((event, index) => (
-                <Card key={index} className="w-full">
-                  <img
-                    alt={`Event ${index + 1}`}
-                    className="w-full rounded-t-lg"
-                    height="200"
-                    src={event.event_image}
-                    style={{
-                      aspectRatio: "300/200",
-                      objectFit: "cover",
-                    }}
-                    width="300"
-                  />
-                  <CardContent>
-                    <h3 className="font-bold">{event.title}</h3>
-                    <p className="text-gray-600">{event.description}</p>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center">
-                        <HeartIcon className="h-6 w-6 text-pink-500" />
-                        <span className="ml-1">{event.likes}</span>
-                      </div>
-                      <Button variant="ghost">Read more</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                <LikedEvents event={event} index={index} />
+
+              )
+              )}
             </div>
           </main>
         </>
       )}
-    </div>  
+    </div>
   )
 }
+
+function LikedEvents({ event, index }) {
+  const [isLiked, setIsLiked] = useState(false)
+  return (
+    <Card key={index} className="w-full">
+      <img
+        alt={`Event ${index + 1}`}
+        className="w-full rounded-t-lg"
+        height="200"
+        src={event.event_image}
+        style={{
+          aspectRatio: "300/200",
+          objectFit: "cover",
+        }}
+        width="300"
+      />
+      <CardContent>
+        <h3 className="font-bold">{event.title}</h3>
+        <p className="text-gray-600">{event.description}</p>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center">
+            <span onClick={() => {
+              setIsLiked(!isLiked);
+              handleLike(id);
+            }}>
+              <HeartIcon className={`h-6 w-6  ${isLiked ? "text-pink-500" : "text-gray-500"}`} />
+            </span>
+
+            <span className="ml-1">{event.likes}</span>
+          </div>
+          <Button variant="ghost">Read more</Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+}
+function TrendingNews({ news, index }) {
+  const [isLiked, setIsLiked] = useState(false)
+  return (
+    <Card key={index} className="w-full">
+      <img
+        alt={`News ${index + 1}`}
+        className="w-full rounded-t-lg"
+        height="200"
+        src={news.news_image}
+        style={{
+          aspectRatio: "300/200",
+          objectFit: "cover",
+        }}
+        width="300"
+      />
+      <CardContent>
+        <h3 className="font-bold">{news.title}</h3>
+        <p className="text-gray-600">{news.description}</p>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center">
+            <span onClick={() => setIsLiked(!isLiked)}>
+              <HeartIcon className={`h-6 w-6  ${isLiked ? "text-pink-500" : "text-gray-500"}`} />
+            </span>
+            <span className="ml-1">{news.likes}</span>
+          </div>
+          <Button variant="ghost">Read more</Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+function BookmarkIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+    </svg>
+  );
+}
+
+function HeartIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </svg>
+  );
+}
+
