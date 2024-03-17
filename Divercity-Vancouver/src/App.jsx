@@ -63,7 +63,7 @@ function App() {
           <Route path="/admin/postnews" element={<Postnews />} />
           <Route path="/admin/editnews" element={<Editnews />} />
           <Route path="/admin/editnews/:id" element={<Editnewsdata/>} />
-          <Route path="/news/explore/news" element={<ExploreNews/>} />
+          <Route path="/news/explore/news/:id" element={<ExploreNews/>} />
           <Route path="/events/explore/event/:id" element={<ExploreEvent/>} />
           <Route path="/userprofile" element={<UserProfile/>} />
           <Route path="/edituserprofile" element={<EditUserProfile/>} />

@@ -159,7 +159,7 @@ function TrendingNews({ news, index }) {
       />
       <CardContent>
         <h3 className="font-bold">{news.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{news.description}</p>
+        <p className="text-gray-600 overflow-hidden max-h-32">{news.content}</p>
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center">
             <span onClick={() => setIsLiked(!isLiked)}>
