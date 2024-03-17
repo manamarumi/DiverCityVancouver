@@ -5,13 +5,12 @@ import { NavLink, useLocation, Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 import { Button } from '../../components/ui/button';
 import { CardContent, Card } from "../../components/ui/card"
-import { getFirestore, collection, query, orderBy, limit, getDocs} from 'firebase/firestore';
+import { getFirestore, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 export default function Homepage() {
 
   const [userId, setUserId] = useState(null);
   const [trendingNews, setTrendingNews] = useState([]);
-  const [likes, setLikes] = useState(0);
   const [likedEvents, setLikedEvents] = useState([]);
 
 
@@ -23,12 +22,12 @@ export default function Homepage() {
       try {
         const firestore = getFirestore();
 
-        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(4)); 
+        const trendingNewsQuery = query(collection(firestore, 'news'), limit(3));  // Once likes is added add this ← in front of limit3 orderBy('likes', 'desc'),
         const trendingNewsSnapshot = await getDocs(trendingNewsQuery);
         const trendingNewsData = trendingNewsSnapshot.docs.map(doc => doc.data());
         setTrendingNews(trendingNewsData);
 
-        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(4)); 
+        const likedEventsQuery = query(collection(firestore, 'event'), limit(3)); // Once likes is added add this ← in front of limit3 orderBy('likes', 'desc'),
         const likedEventsSnapshot = await getDocs(likedEventsQuery);
         const likedEventsData = likedEventsSnapshot.docs.map(doc => doc.data());
         setLikedEvents(likedEventsData);
@@ -39,7 +38,6 @@ export default function Homepage() {
 
     fetchData();
   }, [])
-
   const handleLike = async () => {
     setIsLiked(!isLiked);
     const eventRef = doc(db, "event", id);
@@ -56,7 +54,7 @@ export default function Homepage() {
       <div className="relative h-screen bg-cover bg-center flex justify-center items-center">
         <img className="absolute inset-0 h-full w-full object-cover" src={backgroundImage} alt="Background Image" />
         <div className="flex flex-col text-center items-center justify-center z-10">
-          <img className="w-64 h-64 mr-8 z-5" src={homepageIcon} alt="Left Image" />
+          <img className="w-64 h-64 mr-8" src={homepageIcon} alt="Left Image" />
           <div className="flex flex-col justify-center items-center text-white">
             <h1 className="text-7xl font-bold text-gray-800">
               DiverCity Vancouver
@@ -83,22 +81,20 @@ export default function Homepage() {
         <>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Trending News</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {trendingNews.map((news, index) => (
-                <div key={index}>
-                  <TrendingNews news={news} index={index} />
-                </div>
+                <TrendingNews news={news} index={index} />
               ))}
             </div>
           </main>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Most Liked Events</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {likedEvents.map((event, index) => (
-                <div key={index}>
-                  <LikedEvents event={event} index={index} />
-                </div>
-              ))}
+                <LikedEvents event={event} index={index} />
+
+              )
+              )}
             </div>
           </main>
         </>
@@ -124,7 +120,7 @@ function LikedEvents({ event, index }) {
       />
       <CardContent>
         <h3 className="font-bold">{event.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{event.description}</p>
+        <p className="text-gray-600">{event.description}</p>
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center">
             <span onClick={() => {
@@ -133,6 +129,7 @@ function LikedEvents({ event, index }) {
             }}>
               <HeartIcon className={`h-6 w-6  ${isLiked ? "text-pink-500" : "text-gray-500"}`} />
             </span>
+
             <span className="ml-1">{event.likes}</span>
           </div>
           <Button variant="ghost">Read more</Button>
@@ -159,7 +156,7 @@ function TrendingNews({ news, index }) {
       />
       <CardContent>
         <h3 className="font-bold">{news.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{news.content}</p>
+        <p className="text-gray-600">{news.description}</p>
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center">
             <span onClick={() => setIsLiked(!isLiked)}>
@@ -210,3 +207,4 @@ function HeartIcon(props) {
     </svg>
   );
 }
+

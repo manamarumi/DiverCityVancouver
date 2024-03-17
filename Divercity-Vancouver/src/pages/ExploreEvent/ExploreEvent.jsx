@@ -73,7 +73,7 @@ export default function ExploreEvent() {
       <div key={event.id} className="max-w-7xl mx-auto">
         <div className="flex items-center space-x-4">
           <Link to={"/events"}>
-            <ArrowLeftIcon className="mt-3 text-blue-500 h-6 w-6" />
+            <ArrowLeftIcon className="text-blue-500 h-6 w-6" />
           </Link>
         </div>
         <div className="my-6">

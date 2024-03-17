@@ -20,7 +20,6 @@ export default function Navbar() {
   const [allEvents, setAllEvents] = useState([]);
   const [allNews, setAllNews] = useState([]);
   const [groupedNewsEvents, setGroupedNewsEvents] = useState([]);
-  const [filteredGroupedNewsEvents, setFilteredGroupedNewsEvents] = useState([]);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
@@ -107,31 +106,31 @@ export default function Navbar() {
   };
 
   const setSearchOutput = (event) => {
-    const { value } = event.target;
-    setSearchedValue(value);
+    setSearchedValue(event.target.value);
 
     const filteredGroupedList = groupedNewsEvents.map((groupedItem) => {
       const filteredOptions = groupedItem.options.filter((data) => {
-        return data.title.toLowerCase().includes(value.toLowerCase());
-      });
+        if (data.title.includes(searchedValue)) {
+          return true;
+        }
+      })
 
-      return {
-        ...groupedItem,
-        options: filteredOptions,
-      };
-    });
+      groupedItem.options = filteredOptions;
+      return groupedItem;
+    })
 
-    setFilteredGroupedNewsEvents(filteredGroupedList);
-  };
+    setGroupedNewsEvents(filteredGroupedList);
 
+  }
   return (
     <nav className="bg-bluee py-4">
       <div className="container mx-auto flex items-center justify-between px-4">
         <div className="flex items-center space-x-4 justify-center w-full">
           <NavLink to={"/"}>
             <Button
-              className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === "/" ? "bg-primary" : ""
-                }`}
+              className={`bg-bluee rounded-lg shadow-lg h-13 ${
+                location.pathname === "/" ? "bg-primary" : ""
+              }`}
             >
               <div>
                 <div className="flex items-center justify-center">
@@ -143,8 +142,9 @@ export default function Navbar() {
           </NavLink>
           <NavLink to={"/calendar"}>
             <Button
-              className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === "/calendar" ? "bg-primary" : ""
-                }`}
+              className={`bg-bluee rounded-lg shadow-lg h-13 ${
+                location.pathname === "/calendar" ? "bg-primary" : ""
+              }`}
             >
               <div>
                 <div className="flex items-center justify-center">
@@ -156,8 +156,9 @@ export default function Navbar() {
           </NavLink>
           <NavLink to={`/events/${monthMap[currentMonth]}`}>
             <Button
-              className={`bg-bluee rounded-lg shadow-lg h-13 ${location.pathname === "/events" ? "bg-primary" : ""
-                }`}
+              className={`bg-bluee rounded-lg shadow-lg h-13 ${
+                location.pathname === "/events" ? "bg-primary" : ""
+              }`}
             >
               <div>
                 <div className="flex items-center justify-center">
@@ -170,7 +171,7 @@ export default function Navbar() {
           <div className="relative flex-grow">
             <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
             <Input
-              className="w-full pl-12 pr-4 py-2 border rounded-full bg-white focus:ring-blue-500 focus:border-blue-500 "
+              className="w-full pl-10 pr-4 py-2 border rounded-full bg-white focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search"
               type="search"
               value={searchedValue}
@@ -178,15 +179,24 @@ export default function Navbar() {
             />
 
             {searchedValue.length > 0 && (
-              <div className="absolute top-full left-0 mt-1 w-full max-h-96 bg-white border border-gray-200 rounded-lg shadow-lg overflow-auto z-20">
-                {filteredGroupedNewsEvents.length > 0 &&
-                  filteredGroupedNewsEvents.map(({ groupLabel, options }, index) => {
-                    const url = groupLabel === 'Events' ? 'events/explore/event' : 'news/explore/news';
+              <div
+                style={{
+                  maxHeight: 400,
+                  width: 500,
+                  backgroundColor: "white",
+                  position: "absolute",
+                  zIndex: 999,
+                  overflow: 'auto'
+                }}
+              >
+                {groupedNewsEvents.length > 0 &&
+                  groupedNewsEvents.map(({ groupLabel, options }, index) => {
+                    const url = groupLabel === 'Events'? 'events/explore/event' : 'news/explore/news';
                     return (
-                      <div key={index} style={{ marginBottom: '5px' }}>
-                        <h1 style={{ background: 'gray', marginBottom: '3px' }}>{groupLabel}</h1>
+                      <div key={index}>
+                        <h1 style={{ background: 'gray'}}>{groupLabel}</h1>
                         {options.map((data, index2) => {
-                          return <Link to={`${url}/${data.id}`} key={index2} className="block p-2 hover:bg-gray-200" style={{                            
+                          return <Link to={`${url}/${data.id}`} key={index2} style={{ 
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
@@ -216,10 +226,19 @@ export default function Navbar() {
           </div>
         ) : (
           <>
+            {/* <Link
+        to={"/userprofile"}
+        className="flex items-left space-x-2 text-white-700 hover:text-white-900"
+        href="#"
+      >
+        <UserIcon className="text-grey-400" />
+      </Link> */}
+
             <NavLink to={"/userprofile"}>
               <Button
-                className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${location.pathname === "/userprofile" ? "bg-primary" : ""
-                  }`}
+                className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${
+                  location.pathname === "/userprofile" ? "bg-primary" : ""
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-center">
@@ -233,8 +252,9 @@ export default function Navbar() {
             <NavLink to={"/"}>
               <Button
                 onClick={handleSignOut}
-                className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${location.pathname === "/" ? "" : ""
-                  }`}
+                className={`bg-bluee ml-5 rounded-lg shadow-lg h-13 ${
+                  location.pathname === "/" ? "" : ""
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-center">
