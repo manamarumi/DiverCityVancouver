@@ -152,9 +152,7 @@ function LikedEventsCard({ event, handleLike }) {
           </div>
           <div>
             <Link to={`/events/explore/event/${event.id}`}>
-              <Button className="bg-bluee text-l text-white px-4 py-2 rounded-lg shadow-lg">
-                Read more
-              </Button>
+              <span className="text-red-500">Read more</span>
             </Link>
           </div>
         </div>
@@ -196,9 +194,7 @@ function TrendingNewsCard({ news, handleLike }) {
           </div>
           <div>
             <Link to={`/news/explore/news/${news.id}`}>
-              <Button className="bg-bluee text-l text-white px-4 py-2 rounded-lg shadow-lg">
-                Read more
-              </Button>
+              <span className="text-red-500">Read more</span>
             </Link>
           </div>
         </div>
