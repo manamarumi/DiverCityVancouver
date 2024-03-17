@@ -1,16 +1,13 @@
-import React, { useState, useEffect} from "react";
-import { CardHeader, CardContent, Card } from "../../components/ui/card";
+import React, { useState, useEffect } from "react";
+import { CardContent, Card } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
-import canadaday from "../../assets/monthlycalendarpics/canadaday.jpg";
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useParams } from 'react-router-dom';
 
-
-
-export default function MonthlyEventView() {  
+export default function MonthlyEventView() {
   const { month } = useParams();
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
@@ -28,18 +25,18 @@ export default function MonthlyEventView() {
     "November": 11,
     "December": 12
   };
- 
+
 
   const exploreEvent = (id) => {
     navigate(`/events/explore/event/${id}`);
-  };
+  };  
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const eventsRef = collection(db, 'event'); // Reference to the 'events' collection
         const eventSnapshot = await getDocs(eventsRef); // Fetch documents from the collection
-        
+
         const eventList = []; // Array to hold the events
 
         eventSnapshot.forEach((doc) => {
@@ -48,7 +45,7 @@ export default function MonthlyEventView() {
         });
         const numericMonth = monthMap[month];
         console.log(numericMonth)
-   
+
 
         // Filter events by the selected month
         const filteredEvents = eventList.filter(event => {
@@ -57,7 +54,7 @@ export default function MonthlyEventView() {
 
             const eventDate = event.start_datetime.toDate();
             return eventDate.getMonth() + 1 === numericMonth;
-            
+
           } else {
             return false;
           }
@@ -67,12 +64,12 @@ export default function MonthlyEventView() {
       } catch (error) {
         console.error('Error fetching events: ', error);
       }
-    };
+    };   
 
     fetchEvents();
   }, [month]);
-
-
+  
+  
   return (
     <div>
       <Navbar />
@@ -86,53 +83,45 @@ export default function MonthlyEventView() {
         <div className="grid grid-cols-1 gap-6">
           {events.map((event, index) => {
             return (
-              <Card className="w-full" key={index} display = "flex">
-                
-                
+              <Card className="w-full" key={index} display="flex">
                 <img
-  alt={`Event ${index + 1}`}
-  className="w-full rounded-t-lg"
-  height="200"
-  src={event.event_image}
-  style={{
-    width: '100%',
-    height: '200px',
-    objectFit: 'cover',
-  }}
-  width="300"
-/>
-
-
-
-
-
-                  <CardContent>
-                    <h2 className="text-xl font-semibold mt-2">
-                      {event.title}
-                    </h2>
-                    <p className="text-gray-600 mt-2">{event.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <ClockIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.start_datetime.toDate().toLocaleDateString()}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <LocateIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.location}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <CurrencyIcon className="h-5 w-5 text-gray-500" />
-                        <span>{event.isPremium ? "Paid" : "Free"}</span>
-                      </div>
-                      <Button
-                        className="bg-blue-500 hover:bg-blue-600 text-white"
-                        onClick={() => exploreEvent(event.id)}
-                      >
-                        Explore
-                      </Button>
+                  alt={`Event ${index + 1}`}
+                  className="w-full rounded-t-lg"
+                  height="200"
+                  src={event.event_image}
+                  style={{
+                    width: '100%',
+                    height: '200px',
+                    objectFit: 'cover',
+                  }}
+                  width="300"
+                />
+                <CardContent>
+                  <h2 className="text-xl font-semibold mt-2">
+                    {event.title}
+                  </h2>
+                  <p className="text-gray-600 mt-2">{event.description}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <ClockIcon className="h-5 w-5 text-gray-500" />
+                      <span>{event.start_datetime.toDate().toLocaleDateString()}</span>
                     </div>
-                  </CardContent>
-             
+                    <div className="flex items-center space-x-2">
+                      <LocateIcon className="h-5 w-5 text-gray-500" />
+                      <span>{event.location}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CurrencyIcon className="h-5 w-5 text-gray-500" />
+                      <span>{event.isPremium ? "Paid" : "Free"}</span>
+                    </div>
+                    <Button
+                      className="bg-blue-500 hover:bg-blue-600 text-white"
+                      onClick={() => exploreEvent(event.id)}
+                    >
+                      Explore
+                    </Button>
+                  </div>
+                </CardContent>
               </Card>
             );
           })}
@@ -227,3 +216,4 @@ function LocateIcon(props) {
     </svg>
   );
 }
+
