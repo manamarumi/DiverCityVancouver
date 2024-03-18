@@ -23,12 +23,12 @@ export default function Homepage() {
       try {
         const firestore = getFirestore();
 
-        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(4)); 
+        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(3)); 
         const trendingNewsSnapshot = await getDocs(trendingNewsQuery);
         const trendingNewsData = trendingNewsSnapshot.docs.map(doc => doc.data());
         setTrendingNews(trendingNewsData);
 
-        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(4)); 
+        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(3)); 
         const likedEventsSnapshot = await getDocs(likedEventsQuery);
         const likedEventsData = likedEventsSnapshot.docs.map(doc => doc.data());
         setLikedEvents(likedEventsData);
@@ -83,20 +83,20 @@ export default function Homepage() {
         <>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Trending News</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
               {trendingNews.map((news, index) => (
-                <div key={index}>
-                  <TrendingNews news={news} index={index} />
+                <div className="max-w-xs" key={index}>
+                  <TrendingNewsCard news={news} handleLike={handleLike} />
                 </div>
               ))}
             </div>
           </main>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Most Liked Events</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
               {likedEvents.map((event, index) => (
-                <div key={index}>
-                  <LikedEvents event={event} index={index} />
+                <div className="max-w-xs " key={index}>
+                  <LikedEventsCard event={event} handleLike={handleLike} />
                 </div>
               ))}
             </div>
