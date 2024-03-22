@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import { doc, getDoc, updateDoc, increment, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -10,11 +10,13 @@ export default function ExploreEvent() {
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const eventRef = useRef(null);
 
   useEffect(() => {
     const getEvent = async () => {
-      const eventRef = doc(db, "event", id);
-      const eventDoc = await getDoc(eventRef);
+      eventRef.current = doc(db, "event", id); // Store eventRef in useRef
+      const eventDoc = await getDoc(eventRef.current);
       if (eventDoc.exists()) {
         const eventData = eventDoc.data();
         setEvent({ id: eventDoc.id, ...eventData });
@@ -28,6 +30,7 @@ export default function ExploreEvent() {
           if (userDoc.exists()) {
             const userData = userDoc.data();
             setIsBookmarked(userData.bookmarkedEvents.includes(id));
+            setIsLiked(userData.likedEvents.includes(id)); // Check if the user has liked this event
           }
         }
       } else {
@@ -37,19 +40,61 @@ export default function ExploreEvent() {
     };
 
     getEvent();
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [id]);
 
   const handleLike = async () => {
-    setIsLiked(!isLiked);
+    const userId = JSON.parse(localStorage.getItem('userid'));
+    const userRef = doc(db, "users", userId);
     const eventRef = doc(db, "event", id);
-    await updateDoc(eventRef, {
-      likes: isLiked ? increment(-1) : increment(1)
-    });
-    setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
-  };
-
   
-
+    // Check if the user has already liked the event
+    if (!isLiked) {
+      // If the user hasn't liked the event, update the likes count and add the user's ID to the event's likedBy array
+      setLikes(prevLikes => prevLikes + 1);
+      setIsLiked(true);
+  
+      // Update the like count in the Firestore event document
+      await updateDoc(eventRef, { 
+        likes: increment(1),
+        likedBy: arrayUnion(userId) // Store the user ID who liked the event
+      });
+  
+      // Add the event ID to the user's likedEvents array in Firestore
+      await updateDoc(userRef, {
+        likedEvents: arrayUnion(id),
+        [`likedEvents.${id}`]: true // Store the liked event ID with a true value
+      });
+    } else {
+      // If the user has already liked the event, unlike the event and decrement the likes count
+      setLikes(prevLikes => prevLikes - 1);
+      setIsLiked(false);
+  
+      // Update the like count in the Firestore event document
+      await updateDoc(eventRef, { 
+        likes: increment(-1),
+        likedBy: arrayRemove(userId) // Remove the user ID who unliked the event
+      });
+  
+      // Remove the event ID from the user's likedEvents array in Firestore
+      await updateDoc(userRef, {
+        likedEvents: arrayRemove(id),
+        [`likedEvents.${id}`]: false // Store the liked event ID with a false value
+      });
+    }
+  };
+  
+  
+  
   const handleBookmark = async () => {
     setIsBookmarked(!isBookmarked);
     const userId = JSON.parse(localStorage.getItem('userid'));
@@ -70,28 +115,22 @@ export default function ExploreEvent() {
   }
 
   return (
-    <div>
+    <>
       <Navbar />
-      <div key={event.id} className="max-w-7xl mx-auto">
-        <div className="flex items-center space-x-4">
-          <Link to={"/events"}>
-            <ArrowLeftIcon className="mt-3 text-blue-500 h-6 w-6" />
-          </Link>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="my-6">
           <img
             alt="Event"
-            className="rounded-lg"
-            height="300"
+            className="rounded-lg w-full"
             src={event.event_image}
             style={{
               aspectRatio: "1343/300",
               objectFit: "cover",
+              height: windowWidth >= 768 ? "80vh" : "auto" // Adjust the height based on window width
             }}
-            width="1343"
           />
-          <h1 className="text-4xl font-bold">{event.title}</h1>
-          <p className="mt-4 text-lg">{event.description}</p>
+          <h1 className="text-4xl font-bold mt-6">{event.title}</h1>
+          <p className="mt-2 text-lg">{event.description}</p>
           <div className="flex justify-between items-center mt-6">
             <div className="flex items-center">
               <ClockIcon className="text-gray-500 h-6 w-6" />
@@ -119,10 +158,9 @@ export default function ExploreEvent() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
 
 function BookmarkIcon(props) {
   return (
@@ -139,26 +177,6 @@ function BookmarkIcon(props) {
       strokeLinejoin="round"
     >
       <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-    </svg>
-  );
-}
-
-function ArrowLeftIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m12 19-7-7 7-7" />
-      <path d="M19 12H5" />
     </svg>
   );
 }
@@ -241,3 +259,6 @@ function MapPinIcon(props) {
     </svg>
   );
 }
+
+export { BookmarkIcon, ClockIcon, DollarSignIcon, HeartIcon, MapPinIcon };
+
