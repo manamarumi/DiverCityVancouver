@@ -123,7 +123,7 @@ export default function Subscription() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <Card className="w-full">
                 <CardHeader>
-                  <CardTitle>Free Account</CardTitle>
+                  <CardTitle className="text-center">Free Account</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-center text-lg mb-2">$0/month</p>
@@ -132,12 +132,12 @@ export default function Subscription() {
               </Card>
               <Card className="w-full">
                 <CardHeader>
-                  <CardTitle>Subscriber</CardTitle>
+                  <CardTitle className="text-center">Subscriber</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-center text-lg mb-2">$1.99/month</p>
                   <p className="text-center">Bookmarks</p>
-                  <p className="text-center">Premium Events</p>
+                  <p className="text-center mb-2">Premium Events</p>
                 </CardContent>
               </Card>
             </div>
