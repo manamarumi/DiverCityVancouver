@@ -48,6 +48,8 @@ export default function ExploreEvent() {
     setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
   };
 
+  
+
   const handleBookmark = async () => {
     setIsBookmarked(!isBookmarked);
     const userId = JSON.parse(localStorage.getItem('userid'));
