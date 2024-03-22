@@ -101,7 +101,7 @@ export default function ExploreEvent() {
             </div>
             <div className="flex items-center">
               <DollarSignIcon className="text-gray-500 h-6 w-6" />
-              <p className="ml-2">{event.isPremium ? "Paid" : "Free"}</p>
+              <p className="ml-2">{event.isPremium ? `Paid ($${event.price})` : "Free"}</p>
             </div>
             <div className="flex items-center">
               <button className="p-2" onClick={handleLike}>
