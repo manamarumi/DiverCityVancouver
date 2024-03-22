@@ -98,11 +98,7 @@ export default function Homepage() {
                     Join DiverCity!
                   </Button>
                 </Link> :
-<<<<<<< HEAD
                 <Link to={`/events/${monthMap[currentMonth]}`}>
-=======
-                <Link to={'/events'}>
->>>>>>> 2e2a3da10e4f4674b24e43006d4466a626207639
                   <Button className="mt-16 bg-bluee text-l text-white px-20 py-2 rounded-lg shadow-lg">
                     Explore DiverCity!
                   </Button>
@@ -148,11 +144,7 @@ function LikedEventsCard({ event, handleLike }) {
   };
 
   return (
-<<<<<<< HEAD
     <Card className="w-full p-2">
-=======
-    <Card className="w-full">
->>>>>>> 2e2a3da10e4f4674b24e43006d4466a626207639
       <img
         alt={`Event ${event.id}`}
         className="w-full rounded-t-lg"
@@ -165,13 +157,8 @@ function LikedEventsCard({ event, handleLike }) {
         width="300"
       />
       <CardContent>
-<<<<<<< HEAD
         <h3 className="font-bold mt-2">{event.title}</h3>
         <p className="text-gray-600 truncate max-h-32 mt-2">{event.description}</p>
-=======
-        <h3 className="font-bold">{event.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{event.description}</p>
->>>>>>> 2e2a3da10e4f4674b24e43006d4466a626207639
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
             <button className="p-2" onClick={toggleLike}>
@@ -199,11 +186,7 @@ function TrendingNewsCard({ news, handleLike }) {
   };
 
   return (
-<<<<<<< HEAD
     <Card className="w-full p-2">
-=======
-    <Card className="w-full">
->>>>>>> 2e2a3da10e4f4674b24e43006d4466a626207639
       <img
         alt={`News ${news.id}`}
         className="w-full rounded-t-lg"
@@ -216,13 +199,8 @@ function TrendingNewsCard({ news, handleLike }) {
         width="300"
       />
       <CardContent>
-<<<<<<< HEAD
         <h3 className="font-bold mt-2">{news.title}</h3>
         <p className="text-gray-600 truncate max-h-32 mt-2">{news.content}</p>
-=======
-        <h3 className="font-bold">{news.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{news.content}</p>
->>>>>>> 2e2a3da10e4f4674b24e43006d4466a626207639
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
             <button className="p-2" onClick={toggleLike}>
