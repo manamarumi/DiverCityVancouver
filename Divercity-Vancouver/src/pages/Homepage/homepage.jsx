@@ -11,18 +11,34 @@ export default function Homepage() {
   const [userId, setUserId] = useState(null);
   const [trendingNews, setTrendingNews] = useState([]);
   const [likedEvents, setLikedEvents] = useState([]);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const monthMap = {
+    1: "January",
+    2: "February",
+    3: "March",
+    4: "April",
+    5: "May",
+    6: "June",
+    7: "July",
+    8: "August",
+    9: "September",
+    10: "October",
+    11: "November",
+    12: "December",
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const firestore = getFirestore();
 
-        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(3)); 
+        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(4)); 
         const trendingNewsSnapshot = await getDocs(trendingNewsQuery);
         const trendingNewsData = trendingNewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setTrendingNews(trendingNewsData);
 
-        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(3)); 
+        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(4)); 
         const likedEventsSnapshot = await getDocs(likedEventsQuery);
         const likedEventsData = likedEventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setLikedEvents(likedEventsData);
@@ -82,7 +98,7 @@ export default function Homepage() {
                     Join DiverCity!
                   </Button>
                 </Link> :
-                <Link to={'/events'}>
+                <Link to={`/events/${monthMap[currentMonth]}`}>
                   <Button className="mt-16 bg-bluee text-l text-white px-20 py-2 rounded-lg shadow-lg">
                     Explore DiverCity!
                   </Button>
@@ -95,7 +111,7 @@ export default function Homepage() {
         <>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Trending News</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
               {trendingNews.map((news, index) => (
                 <div className="max-w-xs" key={index}>
                   <TrendingNewsCard news={news} handleLike={handleLike} />
@@ -105,7 +121,7 @@ export default function Homepage() {
           </main>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Most Liked Events</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
               {likedEvents.map((event, index) => (
                 <div className="max-w-xs " key={index}>
                   <LikedEventsCard event={event} handleLike={handleLike} />
@@ -128,7 +144,7 @@ function LikedEventsCard({ event, handleLike }) {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full p-2">
       <img
         alt={`Event ${event.id}`}
         className="w-full rounded-t-lg"
@@ -141,8 +157,8 @@ function LikedEventsCard({ event, handleLike }) {
         width="300"
       />
       <CardContent>
-        <h3 className="font-bold">{event.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{event.description}</p>
+        <h3 className="font-bold mt-2">{event.title}</h3>
+        <p className="text-gray-600 truncate max-h-32 mt-2">{event.description}</p>
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
             <button className="p-2" onClick={toggleLike}>
@@ -170,7 +186,7 @@ function TrendingNewsCard({ news, handleLike }) {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full p-2">
       <img
         alt={`News ${news.id}`}
         className="w-full rounded-t-lg"
@@ -183,8 +199,8 @@ function TrendingNewsCard({ news, handleLike }) {
         width="300"
       />
       <CardContent>
-        <h3 className="font-bold">{news.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{news.content}</p>
+        <h3 className="font-bold mt-2">{news.title}</h3>
+        <p className="text-gray-600 truncate max-h-32 mt-2">{news.content}</p>
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
             <button className="p-2" onClick={toggleLike}>
