@@ -59,7 +59,7 @@ export default function Adminpage() {
             <Button className="bg-bluee rounded-lg shadow-lg h-13">
               <div>
                 <div className="flex items-center justify-center">
-                  <Signout />
+                  <Homepage />
                 </div>
                 <p>Homepage</p>
               </div>
@@ -117,7 +117,7 @@ export default function Adminpage() {
 }
 
 
-function Signout(props) {
+function Homepage(props) {
   return (
     <svg
       fill="currentColor"
