@@ -6,11 +6,13 @@ import Navbar from "../../components/navbar";
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useParams } from 'react-router-dom';
+import { LoadingSpinner } from "../../components/spinner";
 
 export default function MonthlyEventView() {
   const { month } = useParams();
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const monthMap = {
     "January": 1,
     "February": 2,
@@ -33,38 +35,33 @@ export default function MonthlyEventView() {
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoading(true); // Indicate data is loading
       try {
-        const eventsRef = collection(db, 'event'); // Reference to the 'events' collection
-        const eventSnapshot = await getDocs(eventsRef); // Fetch documents from the collection
-
-        const eventList = []; // Array to hold the events
-
+        const eventsRef = collection(db, 'event');
+        const eventSnapshot = await getDocs(eventsRef);
+        const eventList = [];
         eventSnapshot.forEach((doc) => {
-          // Extract data from each document and add it to the eventList array
           eventList.push({ id: doc.id, ...doc.data() });
         });
         const numericMonth = monthMap[month];
-        console.log(numericMonth)
-
 
         // Filter events by the selected month
         const filteredEvents = eventList.filter(event => {
-
           if (event.start_datetime) {
-
             const eventDate = event.start_datetime.toDate();
             return eventDate.getMonth() + 1 === numericMonth;
-
           } else {
             return false;
           }
         });
-        // Set the filtered events state
+
         setEvents(filteredEvents);
+        setLoading(false); // Data loading is complete
       } catch (error) {
         console.error('Error fetching events: ', error);
+        setLoading(false); // Set loading to false even if error occurs
       }
-    };   
+    };
 
     fetchEvents();
   }, [month]);
@@ -80,6 +77,9 @@ export default function MonthlyEventView() {
           </Link>
           <h1 className="text-3xl font-bold">Upcoming Events in {month}</h1>
         </div>
+        {loading ? (
+        <LoadingSpinner className="text-bluee h-40 w-40 animate-spin"/>
+      ) : (
         <div className="grid grid-cols-1 gap-6">
           {events.map((event, index) => {
             return (
@@ -126,6 +126,7 @@ export default function MonthlyEventView() {
             );
           })}
         </div>
+      )}
       </div>
     </div>
   );

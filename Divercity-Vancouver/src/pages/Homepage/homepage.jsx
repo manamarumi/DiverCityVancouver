@@ -1,36 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import backgroundImage from "../../assets/homepage_background.jpg";
 import homepageIcon from "../../assets/homepage_icon.png";
-import { NavLink, useLocation, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 import { Button } from '../../components/ui/button';
-import { CardContent, Card } from "../../components/ui/card"
-import { getFirestore, collection, query, orderBy, limit, getDocs} from 'firebase/firestore';
+import { CardContent, Card } from "../../components/ui/card";
+import { getFirestore, collection, query, orderBy, limit, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
 
 export default function Homepage() {
-
   const [userId, setUserId] = useState(null);
   const [trendingNews, setTrendingNews] = useState([]);
-  const [likes, setLikes] = useState(0);
   const [likedEvents, setLikedEvents] = useState([]);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const monthMap = {
+    1: "January",
+    2: "February",
+    3: "March",
+    4: "April",
+    5: "May",
+    6: "June",
+    7: "July",
+    8: "August",
+    9: "September",
+    10: "October",
+    11: "November",
+    12: "December",
+  };
 
 
   useEffect(() => {
-    const userId = localStorage.getItem('userid');
-    setUserId(userId);
-
     const fetchData = async () => {
       try {
         const firestore = getFirestore();
 
-        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(3)); 
+        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(4)); 
         const trendingNewsSnapshot = await getDocs(trendingNewsQuery);
-        const trendingNewsData = trendingNewsSnapshot.docs.map(doc => doc.data());
+        const trendingNewsData = trendingNewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setTrendingNews(trendingNewsData);
 
-        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(3)); 
+        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(4)); 
         const likedEventsSnapshot = await getDocs(likedEventsQuery);
-        const likedEventsData = likedEventsSnapshot.docs.map(doc => doc.data());
+        const likedEventsData = likedEventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setLikedEvents(likedEventsData);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -38,17 +49,34 @@ export default function Homepage() {
     };
 
     fetchData();
-  }, [])
+    const userId = localStorage.getItem('userid');
+    setUserId(userId);
+  }, []);
 
-  const handleLike = async () => {
-    setIsLiked(!isLiked);
-    const eventRef = doc(db, "event", id);
-    await updateDoc(eventRef, {
-      likes: isLiked ? increment(-1) : increment(1)
-    });
-    setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
+  const handleLike = async (id, collectionName, isLiked) => {
+    try {
+      const firestore = getFirestore();
+      const docRef = doc(firestore, collectionName, id);
+      await updateDoc(docRef, {
+        likes: isLiked ? increment(-1) : increment(1)
+      });
+      if (collectionName === 'news') {
+        setTrendingNews(prevState =>
+          prevState.map(item =>
+            item.id === id ? { ...item, likes: isLiked ? item.likes - 1 : item.likes + 1 } : item
+          )
+        );
+      } else if (collectionName === 'event') {
+        setLikedEvents(prevState =>
+          prevState.map(item =>
+            item.id === id ? { ...item, likes: isLiked ? item.likes - 1 : item.likes + 1 } : item
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error updating likes:', error);
+    }
   };
-
 
   return (
     <div>
@@ -70,7 +98,8 @@ export default function Homepage() {
                   <Button className="mt-16 bg-bluee text-l text-white px-20 py-2 rounded-lg shadow-lg">
                     Join DiverCity!
                   </Button>
-                </Link> : <Link to={'/events'}>
+                </Link> :
+                <Link to={`/events/${monthMap[currentMonth]}`}>
                   <Button className="mt-16 bg-bluee text-l text-white px-20 py-2 rounded-lg shadow-lg">
                     Explore DiverCity!
                   </Button>
@@ -83,7 +112,7 @@ export default function Homepage() {
         <>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Trending News</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
               {trendingNews.map((news, index) => (
                 <div className="max-w-xs" key={index}>
                   <TrendingNewsCard news={news} handleLike={handleLike} />
@@ -93,7 +122,7 @@ export default function Homepage() {
           </main>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Most Liked Events</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
               {likedEvents.map((event, index) => (
                 <div className="max-w-xs " key={index}>
                   <LikedEventsCard event={event} handleLike={handleLike} />
@@ -104,15 +133,21 @@ export default function Homepage() {
         </>
       )}
     </div>
-  )
+  );
 }
 
-function LikedEvents({ event, index }) {
-  const [isLiked, setIsLiked] = useState(false)
+function LikedEventsCard({ event, handleLike }) {
+  const [isLiked, setIsLiked] = useState(false);
+
+  const toggleLike = () => {
+    handleLike(event.id, 'event', isLiked);
+    setIsLiked(!isLiked);
+  };
+
   return (
-    <Card key={index} className="w-full">
+    <Card className="w-full p-2">
       <img
-        alt={`Event ${index + 1}`}
+        alt={`Event ${event.id}`}
         className="w-full rounded-t-lg"
         height="200"
         src={event.event_image}
@@ -123,31 +158,38 @@ function LikedEvents({ event, index }) {
         width="300"
       />
       <CardContent>
-        <h3 className="font-bold">{event.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{event.description}</p>
-        <div className="flex items-center justify-between mt-2">
+        <h3 className="font-bold mt-2">{event.title}</h3>
+        <p className="text-gray-600 truncate max-h-32 mt-2">{event.description}</p>
+        <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
-            <span onClick={() => {
-              setIsLiked(!isLiked);
-              handleLike(id);
-            }}>
-              <HeartIcon className={`h-6 w-6  ${isLiked ? "text-pink-500" : "text-gray-500"}`} />
-            </span>
+            <button className="p-2" onClick={toggleLike}>
+              <HeartIcon className={`h-6 w-6 ${isLiked ? 'text-red-500' : 'text-gray-500'}`} />
+            </button>
             <span className="ml-1">{event.likes}</span>
           </div>
-          <Button variant="ghost">Read more</Button>
+          <div>
+            <Link to={`/events/explore/event/${event.id}`}>
+              <span className="text-red-500">Read more</span>
+            </Link>
+          </div>
         </div>
       </CardContent>
     </Card>
-  )
-
+  );
 }
-function TrendingNews({ news, index }) {
-  const [isLiked, setIsLiked] = useState(false)
+
+function TrendingNewsCard({ news, handleLike }) {
+  const [isLiked, setIsLiked] = useState(false);
+
+  const toggleLike = () => {
+    handleLike(news.id, 'news', isLiked);
+    setIsLiked(!isLiked);
+  };
+
   return (
-    <Card key={index} className="w-full">
+    <Card className="w-full p-2">
       <img
-        alt={`News ${index + 1}`}
+        alt={`News ${news.id}`}
         className="w-full rounded-t-lg"
         height="200"
         src={news.news_image}
@@ -158,37 +200,23 @@ function TrendingNews({ news, index }) {
         width="300"
       />
       <CardContent>
-        <h3 className="font-bold">{news.title}</h3>
-        <p className="text-gray-600 overflow-hidden max-h-32">{news.content}</p>
-        <div className="flex items-center justify-between mt-2">
+        <h3 className="font-bold mt-2">{news.title}</h3>
+        <p className="text-gray-600 truncate max-h-32 mt-2">{news.content}</p>
+        <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
-            <span onClick={() => setIsLiked(!isLiked)}>
-              <HeartIcon className={`h-6 w-6  ${isLiked ? "text-pink-500" : "text-gray-500"}`} />
-            </span>
+            <button className="p-2" onClick={toggleLike}>
+              <HeartIcon className={`h-6 w-6 ${isLiked ? 'text-red-500' : 'text-gray-500'}`} />
+            </button>
             <span className="ml-1">{news.likes}</span>
           </div>
-          <Button variant="ghost">Read more</Button>
+          <div>
+            <Link to={`/news/explore/news/${news.id}`}>
+              <span className="text-red-500">Read more</span>
+            </Link>
+          </div>
         </div>
       </CardContent>
     </Card>
-  )
-}
-function BookmarkIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-    </svg>
   );
 }
 
