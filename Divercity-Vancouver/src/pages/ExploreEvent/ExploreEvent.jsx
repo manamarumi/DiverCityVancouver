@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import { doc, getDoc, updateDoc, increment, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -56,19 +56,19 @@ export default function ExploreEvent() {
     const userId = JSON.parse(localStorage.getItem('userid'));
     const userRef = doc(db, "users", userId);
     const eventRef = doc(db, "event", id);
-  
+
     // Check if the user has already liked the event
     if (!isLiked) {
       // If the user hasn't liked the event, update the likes count and add the user's ID to the event's likedBy array
       setLikes(prevLikes => prevLikes + 1);
       setIsLiked(true);
-  
+
       // Update the like count in the Firestore event document
-      await updateDoc(eventRef, { 
+      await updateDoc(eventRef, {
         likes: increment(1),
         likedBy: arrayUnion(userId) // Store the user ID who liked the event
       });
-  
+
       // Add the event ID to the user's likedEvents array in Firestore
       await updateDoc(userRef, {
         likedEvents: arrayUnion(id),
@@ -78,13 +78,13 @@ export default function ExploreEvent() {
       // If the user has already liked the event, unlike the event and decrement the likes count
       setLikes(prevLikes => prevLikes - 1);
       setIsLiked(false);
-  
+
       // Update the like count in the Firestore event document
-      await updateDoc(eventRef, { 
+      await updateDoc(eventRef, {
         likes: increment(-1),
         likedBy: arrayRemove(userId) // Remove the user ID who unliked the event
       });
-  
+
       // Remove the event ID from the user's likedEvents array in Firestore
       await updateDoc(userRef, {
         likedEvents: arrayRemove(id),
@@ -92,9 +92,9 @@ export default function ExploreEvent() {
       });
     }
   };
-  
-  
-  
+
+
+
   const handleBookmark = async () => {
     setIsBookmarked(!isBookmarked);
     const userId = JSON.parse(localStorage.getItem('userid'));
@@ -118,6 +118,11 @@ export default function ExploreEvent() {
     <>
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center space-x-4">
+          <Link to={"/"}>
+            <ArrowLeftIcon className="mt-3 text-blue-500 h-6 w-6" />
+          </Link>
+        </div>
         <div className="my-6">
           <img
             alt="Event"
@@ -256,6 +261,26 @@ function MapPinIcon(props) {
     >
       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
       <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
+function ArrowLeftIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m12 19-7-7 7-7" />
+      <path d="M19 12H5" />
     </svg>
   );
 }
