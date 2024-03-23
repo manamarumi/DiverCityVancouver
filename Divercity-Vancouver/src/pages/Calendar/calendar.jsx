@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 
 
-
-
 export default function Calendar() {
     return (
         <div>
@@ -22,7 +20,7 @@ export default function Calendar() {
               alt="January Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/january.jpeg"
+              src="../../assets/monthlycalendarpics/january.jpeg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -42,7 +40,7 @@ export default function Calendar() {
               alt="February Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/february.jpg"
+              src="../../assets/monthlycalendarpics/february.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -61,7 +59,7 @@ export default function Calendar() {
               alt="March Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/march.jpg"
+              src="../../src/assets/monthlycalendarpics/march.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -80,7 +78,7 @@ export default function Calendar() {
               alt="April Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/april.jpg"
+              src="../../assets/monthlycalendarpics/april.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -99,7 +97,7 @@ export default function Calendar() {
               alt="May Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/may2.jpg"
+              src="../../assets/monthlycalendarpics/may2.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -120,7 +118,7 @@ export default function Calendar() {
               alt="June Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/june.jpg"
+              src="../../src/assets/monthlycalendarpics/june.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -140,7 +138,7 @@ export default function Calendar() {
               alt="July Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/july.jpg"
+              src="../../src/assets/monthlycalendarpics/july.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -159,7 +157,7 @@ export default function Calendar() {
               alt="August Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/aug.jpeg"
+              src="../../src/assets/monthlycalendarpics/aug.jpeg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -178,7 +176,7 @@ export default function Calendar() {
               alt="September Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/sept.jpeg"
+              src="../../src/assets/monthlycalendarpics/sept.jpeg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -197,7 +195,7 @@ export default function Calendar() {
               alt="October Event"
               className="w-full"
               height="200"
-              src={"../../../src/assets/monthlycalendarpics/oct.jpg"}
+              src={"../../src/assets/monthlycalendarpics/oct.jpg"}
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -216,7 +214,7 @@ export default function Calendar() {
               alt="November Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/november.jpeg"
+              src="../../src/assets/monthlycalendarpics/november.jpeg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -235,7 +233,7 @@ export default function Calendar() {
               alt="December Event"
               className="w-full"
               height="200"
-              src="../../../src/assets/monthlycalendarpics/dec.jpg"
+              src="../../src/assets/monthlycalendarpics/dec.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
