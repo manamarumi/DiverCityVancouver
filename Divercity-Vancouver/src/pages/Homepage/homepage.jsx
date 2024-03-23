@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 import { Button } from '../../components/ui/button';
 import { CardContent, Card } from "../../components/ui/card";
-import { getFirestore, collection, query, orderBy, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
+import { getFirestore, collection, query, orderBy, limit, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
 
 export default function Homepage() {
   const [userId, setUserId] = useState(null);
@@ -33,12 +33,12 @@ export default function Homepage() {
       try {
         const firestore = getFirestore();
 
-        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc')); 
+        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(10)); 
         const trendingNewsSnapshot = await getDocs(trendingNewsQuery);
         const trendingNewsData = trendingNewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setTrendingNews(trendingNewsData);
 
-        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc')); 
+        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(10)); 
         const likedEventsSnapshot = await getDocs(likedEventsQuery);
         const likedEventsData = likedEventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setLikedEvents(likedEventsData);
