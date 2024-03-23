@@ -1,16 +1,26 @@
 import React from "react";
+import homepageIcon from "../assets/homepage_icon.png";
 
 export const LoadingSpinner = ({ className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    viewBox="0 0 24 24"
-    strokeWidth="2"
-    stroke="currentColor"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 2c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9z"></path>
-  </svg>
+  <div style={styles.container}>
+    <img
+      src={homepageIcon}
+      className={className}
+      alt="Loading spinner"
+      style={styles.spinner}
+    />
+  </div>
 );
+
+const styles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '50vh',
+  },
+  spinner: {
+    width: '300px',
+    height: '300px',
+  },
+};
