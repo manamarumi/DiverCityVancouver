@@ -186,7 +186,7 @@ function TrendingNewsCard({ news, handleLike }) {
   };
 
   return (
-    <Card className="w-full-2">
+    <Card className="w-full p-2">
       <img
         alt={`News ${news.id}`}
         className="w-full rounded-t-lg"
