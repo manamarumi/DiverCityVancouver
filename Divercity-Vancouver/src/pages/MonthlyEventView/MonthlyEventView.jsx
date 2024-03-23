@@ -29,7 +29,7 @@ export default function MonthlyEventView() {
   };
 
   const exploreEvent = (id) => {
-    navigate(`/events/explore/event/${id}`);
+    navigate(`/events/explore/${id}`);
   };  
 
   useEffect(() => {
