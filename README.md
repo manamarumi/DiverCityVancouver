@@ -4,10 +4,10 @@ Welcome to the DiverCity Vancouver This project aims to provide a platform for d
 
 ## Team
 
-- **Kevin Soo** (Team Lead/Frontend Developer): Led the project development, coordinated team efforts, assisted any team hardship and bug fixes.
+- **Kevin Soo** (Team Lead/Frontend Developer): Led the project development, coordinated team efforts, assisted team memebers with frontend development.
 - **Rayna Huang** (Frontend Developer): Designed and developed the user interface, implemented frontend functionalities, and ensured a seamless user experience.
 - **Hoechang Kim (Dan)** (Backend Developer/Frontend Developer): Implemented server-side logic, database management, and API integrations to support the application functionalities and assisted with frontend development.
-- **Gabor Szijj** (UX/UI Designer): Conducted user research, designed prototypes, and provided valuable insights for improving the application's usability.
+- **Gabor Szijj** (UX/UI Designer): Designed prototypes, and provided valuable insights for improving the application's usability. Assisted with other aspects of development.
 
 ## Tech Stack
 
