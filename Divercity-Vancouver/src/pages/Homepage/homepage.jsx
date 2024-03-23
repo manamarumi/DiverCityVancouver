@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 import { Button } from '../../components/ui/button';
 import { CardContent, Card } from "../../components/ui/card";
-import { getFirestore, collection, query, orderBy, limit, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
+import { getFirestore, collection, query, orderBy, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
 
 export default function Homepage() {
   const [userId, setUserId] = useState(null);
@@ -33,12 +33,12 @@ export default function Homepage() {
       try {
         const firestore = getFirestore();
 
-        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc'), limit(4)); 
+        const trendingNewsQuery = query(collection(firestore, 'news'), orderBy('likes', 'desc')); 
         const trendingNewsSnapshot = await getDocs(trendingNewsQuery);
         const trendingNewsData = trendingNewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setTrendingNews(trendingNewsData);
 
-        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc'), limit(4)); 
+        const likedEventsQuery = query(collection(firestore, 'event'), orderBy('likes', 'desc')); 
         const likedEventsSnapshot = await getDocs(likedEventsQuery);
         const likedEventsData = likedEventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setLikedEvents(likedEventsData);
@@ -111,9 +111,9 @@ export default function Homepage() {
         <>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Trending News</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
+            <div className="flex flex-no-wrap overflow-x-scroll scrolling-touch items-start mb-8">
               {trendingNews.map((news, index) => (
-                <div className="max-w-xs" key={index}>
+                <div className="flex-none w-96 mr-8 mb-3 border rounded-lg" key={index}>
                   <TrendingNewsCard news={news} handleLike={handleLike} />
                 </div>
               ))}
@@ -121,9 +121,9 @@ export default function Homepage() {
           </main>
           <main className="p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Most Liked Events</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
+            <div className="flex flex-no-wrap overflow-x-scroll scrolling-touch items-start mb-8">
               {likedEvents.map((event, index) => (
-                <div className="max-w-xs " key={index}>
+                <div className="flex-none w-96 mr-8 mb-3 border rounded-lg" key={index}>
                   <LikedEventsCard event={event} handleLike={handleLike} />
                 </div>
               ))}
@@ -157,7 +157,7 @@ function LikedEventsCard({ event, handleLike }) {
         width="300"
       />
       <CardContent>
-        <h3 className="font-bold mt-2">{event.title}</h3>
+        <h3 className="font-bold mt-2 truncate">{event.title}</h3>
         <p className="text-gray-600 truncate max-h-32 mt-2">{event.description}</p>
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
@@ -167,7 +167,7 @@ function LikedEventsCard({ event, handleLike }) {
             <span className="ml-1">{event.likes}</span>
           </div>
           <div>
-            <Link to={`/events/explore/${event.id}`}>
+            <Link to={`/events/explore/event/${event.id}`}>
               <span className="text-red-500">Read more</span>
             </Link>
           </div>
@@ -186,7 +186,7 @@ function TrendingNewsCard({ news, handleLike }) {
   };
 
   return (
-    <Card className="w-full p-2">
+    <Card className="w-full-2">
       <img
         alt={`News ${news.id}`}
         className="w-full rounded-t-lg"
@@ -199,7 +199,7 @@ function TrendingNewsCard({ news, handleLike }) {
         width="300"
       />
       <CardContent>
-        <h3 className="font-bold mt-2">{news.title}</h3>
+        <h3 className="font-bold mt-2 truncate">{news.title}</h3>
         <p className="text-gray-600 truncate max-h-32 mt-2">{news.content}</p>
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
@@ -209,7 +209,7 @@ function TrendingNewsCard({ news, handleLike }) {
             <span className="ml-1">{news.likes}</span>
           </div>
           <div>
-            <Link to={`/news/explore/${news.id}`}>
+            <Link to={`/news/explore/news/${news.id}`}>
               <span className="text-red-500">Read more</span>
             </Link>
           </div>
