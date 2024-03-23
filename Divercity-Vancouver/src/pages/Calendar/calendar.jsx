@@ -15,7 +15,7 @@ export default function Calendar() {
               alt="January Event"
               className="w-full"
               height="200"
-              src="src/assets/monthlycalendarpics/january.jpeg"
+              src="../../../src/assets/monthlycalendarpics/january.jpeg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
