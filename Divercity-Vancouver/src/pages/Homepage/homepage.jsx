@@ -167,7 +167,7 @@ function LikedEventsCard({ event, handleLike }) {
             <span className="ml-1">{event.likes}</span>
           </div>
           <div>
-            <Link to={`/events/explore/event/${event.id}`}>
+            <Link to={`/events/explore/${event.id}`}>
               <span className="text-red-500">Read more</span>
             </Link>
           </div>
@@ -209,7 +209,7 @@ function TrendingNewsCard({ news, handleLike }) {
             <span className="ml-1">{news.likes}</span>
           </div>
           <div>
-            <Link to={`/news/explore/news/${news.id}`}>
+            <Link to={`/news/explore/${news.id}`}>
               <span className="text-red-500">Read more</span>
             </Link>
           </div>
