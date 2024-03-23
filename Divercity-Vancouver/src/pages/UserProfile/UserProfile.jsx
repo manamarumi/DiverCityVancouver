@@ -90,7 +90,7 @@ export default function UserProfile() {
                        {userData.description}
                       </p>
                     </div>
-                    <div className="flex items-center mt-4 space-x-4">
+                    <div className="flex items-center mt-4 mb-4 space-x-4">
                       <Link to={"/edituserprofile"}>
                         <Button className="bg-blue-500 text-white">
                           Edit Profile
@@ -103,7 +103,7 @@ export default function UserProfile() {
               </CardContent>
             </Card>
             <div>
-              <h2 className="text-xl font-semibold mb-4">Bookmarked Events</h2>
+              <h2 className="text-xl font-semibold mb-2">Bookmarked Events</h2>
               <div className="grid grid-cols-3 gap-4">
                 {/* Map over bookmarkedEvents and display each event */}
                 {bookmarkedEvents.map(eventId => (
@@ -153,11 +153,11 @@ function EventCard({ eventId, handleUnbookmark }) {
         <img
           alt={event.title}
           src={event.event_image}
-          className="w-full h-40 object-cover rounded"
+          className="w-full h-40 object-cover rounded mt-2"
         />
-        <p className="text-sm text-gray-700">Date: {formatDateRange(event.start_datetime, event.end_datetime)}</p>
+        <p className="text-sm text-gray-700 mt-2">Date: {formatDateRange(event.start_datetime, event.end_datetime)}</p>
         <p className="text-sm text-gray-700">Location: {event.location}</p>
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex justify-between items-center mt-4 mb-2">
           <Link to={`/events/explore/event/${eventId}`} className="text-blue-500 hover:underline">View</Link>
           <button onClick={() => handleUnbookmark(eventId)} className="text-red-500">Unbookmark</button>
         </div>

@@ -110,8 +110,8 @@ export default function Editeventsdata() {
           <Link to={'/'}>
             <Button className="bg-bluee rounded-lg shadow-lg h-13">
               <div className="flex items-center justify-center">
-                <Signout />
-                <p>Sign Out</p>
+                <Homepage />
+                <p>Homepage</p>
               </div>
             </Button>
           </Link>
@@ -169,7 +169,7 @@ export default function Editeventsdata() {
   );
 }
 
-function Signout(props) {
+function Homepage(props) {
   return (
     <svg
       fill="currentColor"

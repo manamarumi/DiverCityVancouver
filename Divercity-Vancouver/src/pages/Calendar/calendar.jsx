@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar';
 
 
-
-
-
 export default function Calendar() {
     return (
         <div>
@@ -23,7 +20,7 @@ export default function Calendar() {
               alt="January Event"
               className="w-full"
               height="200"
-              src="../../src/assets/monthlycalendarpics/january.jpeg"
+              src="../../assets/monthlycalendarpics/january.jpeg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -43,7 +40,7 @@ export default function Calendar() {
               alt="February Event"
               className="w-full"
               height="200"
-              src="../../src/assets/monthlycalendarpics/february.jpg"
+              src="../../assets/monthlycalendarpics/february.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -81,7 +78,7 @@ export default function Calendar() {
               alt="April Event"
               className="w-full"
               height="200"
-              src="../../src/assets/monthlycalendarpics/april.jpg"
+              src="../../assets/monthlycalendarpics/april.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",
@@ -100,7 +97,7 @@ export default function Calendar() {
               alt="May Event"
               className="w-full"
               height="200"
-              src="../../src/assets/monthlycalendarpics/may2.jpg"
+              src="../../assets/monthlycalendarpics/may2.jpg"
               style={{
                 aspectRatio: "300/200",
                 objectFit: "cover",

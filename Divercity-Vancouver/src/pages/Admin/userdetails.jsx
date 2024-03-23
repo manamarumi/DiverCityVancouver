@@ -47,7 +47,7 @@ export default function UserDetails() {
           <Link to={'/'}>
             <Button className="bg-bluee rounded-lg shadow-lg h-13">
               <div className="flex items-center justify-center">
-                <Signout />
+                <Homepage />
                 <p>Homepage</p>
               </div>
             </Button>
@@ -134,7 +134,7 @@ function ArrowLeftIcon(props) {
   )
 }
 
-function Signout(props) {
+function Homepage(props) {
   return (
     <svg
       fill="currentColor"

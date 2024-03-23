@@ -184,7 +184,7 @@ export default function Navbar() {
                     const url = groupLabel === 'Events' ? 'events/explore/event' : 'news/explore/news';
                     return (
                       <div key={index} style={{ marginBottom: '5px' }}>
-                        <h1 style={{ background: 'gray', marginBottom: '3px' }}>{groupLabel}</h1>
+                        <h1 style={{ background: 'rgb(70 84 163)', marginBottom: '3px' }}>{groupLabel}</h1>
                         {options.map((data, index2) => {
                           return <Link to={`${url}/${data.id}`} key={index2} className="block p-2 hover:bg-gray-200" style={{                            
                             whiteSpace: 'nowrap',
