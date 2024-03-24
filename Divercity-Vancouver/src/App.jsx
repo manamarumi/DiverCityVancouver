@@ -12,7 +12,6 @@ import Editnews from './pages/Admin/editnews';
 import Editnewsdata from './pages/Admin/editnewsdata';
 import Signuppage from './pages/Customer/Signuppage/signuppage';
 import Loginpage from './pages/Customer/Login/Login';
-import ForgotPassword from './pages/Customer/ForgotPassword/ForgotPassword';
 import MonthlyEventView from './pages/MonthlyEventView/MonthlyEventView';
 import Calendar from './pages/Calendar/calendar';
 import UserDetails from './pages/Admin/userdetails';
@@ -69,7 +68,6 @@ function App() {
           <Route path="/edituserprofile" element={<EditUserProfile/>} />
           <Route path="/changepassword" element={<ChangePassword/>} />
           <Route path="/subscription" element={<Subscription/>} />
-          <Route path="/forgotpassword" element={<ForgotPassword/>} />
           {/* Protected routes */}
           <Route element={<ProtectedRoutes auth={isAuthenticated} />}>
             {/* Add protected routes here */}

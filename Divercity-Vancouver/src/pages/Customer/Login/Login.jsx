@@ -124,9 +124,6 @@ export default function Loginpage() {
               </p>
             </div>
             <div className="text-center mt-4">
-              <p className="text-sm text-gray-600">
-                Forgot Password? <Link to="/forgotpassword" className="text-blue-600">Click here</Link>
-              </p>
             </div>
           </div>
         </div>
